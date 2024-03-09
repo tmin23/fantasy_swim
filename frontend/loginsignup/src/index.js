@@ -5,13 +5,15 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import ErrorPage from "./LoginSignup/login-error-page";
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const router = createBrowserRouter([
   {
     path: "/", 
-    element: <App />
+    element: <App />,
+    errorElement: <ErrorPage/>,
   }
 ])
 
