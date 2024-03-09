@@ -7,7 +7,6 @@ import swimcloudlogo from "../pages/Assets/swimcloud.png"
 
 export default function App() {
     return (
-        <>
       <MDBNavbar light bgColor='light'>
         <MDBContainer fluid>
           <MDBNavbarBrand href='#'>
@@ -17,13 +16,12 @@ export default function App() {
               alt='logo'
               loading='lazy'
             />
-            Fantasy Swimming
+            <span class ="fw-bold">Fantasy Swimming</span>
           </MDBNavbarBrand>
           <div style= {{position: 'fixed', right: "30px"}}>
             <MDBBtn rounded>Create League</MDBBtn>
           </div>
         </MDBContainer>
       </MDBNavbar>
-    </>
     );
 }
