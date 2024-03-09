@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import Header from '../../components/Header';
 
 import {
     MDBContainer,
@@ -19,6 +20,8 @@ import {
 
   export default function App() {
     return (
-      <MDBBtn rounded>Create League</MDBBtn>
+      <>
+        <Header />
+      </>
     )
   }
