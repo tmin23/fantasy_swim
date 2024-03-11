@@ -32,6 +32,13 @@ const LoginSignup = () => {
                         <Link to="/UserHome">
                             <MDBBtn className = 'mb-4 w-100 gradient-custom-2'>Sign in</MDBBtn>
                         </Link>
+                
+
+                        <Link to = "/LeagueHome">
+                            <MDBBtn className = 'mb-4 w-100 gradient-custom-2'>I DO THE TEST</MDBBtn>
+                        </Link>
+
+                        
                         <a className ='text-muted' href = '#!'>Forgot password?</a>
                     </div>
 

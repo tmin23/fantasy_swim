@@ -7,7 +7,8 @@ import {
 } from "react-router-dom";
 import ErrorPage from "./pages/LoginSignup/login-error-page";
 import LoginSignup from './pages/LoginSignup/LoginSignup';
-import UserHome from "./pages/UserHome/UserHome"
+import UserHome from "./pages/UserHome/UserHome";
+import LeagueHome from "./pages/LeagueHome/LeagueHome";
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 
 const router = createBrowserRouter([
@@ -19,6 +20,11 @@ const router = createBrowserRouter([
   {
     path: "/UserHome",
     element: <UserHome />,
+  },
+
+  {
+    path: "/LeagueHome",
+    element: <LeagueHome />,
   }
 ]);
 
