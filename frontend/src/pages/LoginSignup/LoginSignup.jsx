@@ -8,6 +8,7 @@ import {
   }
   from 'mdb-react-ui-kit';
 import swimcloudlogo from "../Assets/swimcloud.png";
+import { Link } from 'react-router-dom';
 
 import './LoginSignup.css' 
 
@@ -28,7 +29,16 @@ const LoginSignup = () => {
                     <MDBInput wrapperClass='mb-4' label = 'Password' id = 'form2' type = 'password'/>
 
                     <div className = 'text-center pt-1 mb-5 pb-1'>
-                        <MDBBtn className = 'mb-4 w-100 gradient-custom-2'>Sign in</MDBBtn>
+                        <Link to="/UserHome">
+                            <MDBBtn className = 'mb-4 w-100 gradient-custom-2'>Sign in</MDBBtn>
+                        </Link>
+                
+
+                        <Link to = "/LeagueHome">
+                            <MDBBtn className = 'mb-4 w-100 gradient-custom-2'>I DO THE TEST</MDBBtn>
+                        </Link>
+
+                        
                         <a className ='text-muted' href = '#!'>Forgot password?</a>
                     </div>
 
