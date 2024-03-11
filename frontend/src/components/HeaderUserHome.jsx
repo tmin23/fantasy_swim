@@ -3,6 +3,7 @@ import { MDBContainer,
 MDBBtn,
 MDBNavbar,
 MDBNavbarBrand } from "mdb-react-ui-kit";
+import { Link } from 'react-router-dom';
 import swimcloudlogo from "../pages/Assets/swimcloud.png"
 
 export default function App() {
@@ -19,7 +20,9 @@ export default function App() {
             <span class ="fw-bold">Fantasy Swimming</span>
           </MDBNavbarBrand>
           <div style= {{position: 'fixed', right: "30px"}}>
-            <MDBBtn rounded>Create League</MDBBtn>
+            <Link to="/CreateLeague">
+              <MDBBtn rounded>Create League</MDBBtn>
+            </Link>
           </div>
         </MDBContainer>
       </MDBNavbar>
