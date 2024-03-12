@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const db =
-  "mongodb+srv://mdowd4848:MRD*goCaps4@fantasyswim.yvo9bof.mongodb.net/?retryWrites=true&w=majority&appName=FantasySwim";
+  "mongodb+srv://mdowd4848:MRD*goCaps4@fantasyswim.yvo9bof.mongodb.net/fantasy_swimming?retryWrites=true&w=majority&appName=FantasySwim";
 /* Replace <password> with your database password */
 
 mongoose.set("strictQuery", true, "useNewUrlParser", true);
