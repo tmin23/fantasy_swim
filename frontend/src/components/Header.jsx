@@ -1,16 +1,16 @@
 import React from 'react';
 import { MDBContainer,
-MDBBtn,
 MDBNavbar,
-MDBNavbarBrand } from "mdb-react-ui-kit";
-import { Link } from 'react-router-dom';
+MDBNavbarBrand,
+MDBNavbarItem } from "mdb-react-ui-kit";
 import swimcloudlogo from "../pages/Assets/swimcloud.png"
+import {Link} from 'react-router-dom'
 
 export default function App() {
     return (
       <MDBNavbar light bgColor='light'>
         <MDBContainer fluid>
-          <MDBNavbarBrand href='#'>
+          <MDBNavbarBrand href='../UserHome'>
             <img
               src={swimcloudlogo}
               height='40'
@@ -19,12 +19,12 @@ export default function App() {
             />
             <span class ="fw-bold">Fantasy Swimming</span>
           </MDBNavbarBrand>
-          <div style= {{position: 'fixed', right: "30px"}}>
-            <Link to="/CreateLeague">
-              <MDBBtn rounded>Create League</MDBBtn>
-            </Link>
-          </div>
         </MDBContainer>
+        <div style= {{position: 'fixed', right: "30px"}}>
+          <span>
+            Profile info
+          </span>
+        </div>
       </MDBNavbar>
     );
 }
