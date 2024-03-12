@@ -20,18 +20,18 @@ export default function LeaguesList() {
                 <Grid item xs>
                     <Link to="/LeagueHome">
                         <CustomButtonBase component={Item}>
-                            League 1
+                            Hathaway House League
                         </CustomButtonBase>
                     </Link>
                 </Grid>
                 <Grid item xs>
                     <CustomButtonBase component={Item}>
-                        League 2
+                        Big Apple League
                     </CustomButtonBase>
                 </Grid>
                 <Grid item xs>
                     <CustomButtonBase component={Item}>
-                        League 3
+                        RPI Swimming League
                     </CustomButtonBase>
                 </Grid>
             </Grid>

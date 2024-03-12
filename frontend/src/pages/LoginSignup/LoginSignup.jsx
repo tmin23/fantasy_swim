@@ -44,7 +44,7 @@ const LoginSignup = () => {
 
                     <div className = 'd-flex flex-row align-item-center justify-content-center pb-4 mb-4'>
                         <p className = 'mb-0'>Don't have an account?</p>
-                        <MDBBtn outline className ='mx-2' color = 'danger'>You STUIPID MAKE AN ACCOUNT</MDBBtn>
+                        <MDBBtn outline className ='mx-2' color = 'danger'>Make Account</MDBBtn>
                     </div>
                 </div>
             </MDBCol>

@@ -8,7 +8,7 @@ import swimcloudlogo from "../pages/Assets/swimcloud.png"
 
 export default function App() {
     return (
-      <MDBNavbar light bgColor='light'>
+      <MDBNavbar expand='lg' light style={{ backgroundColor: '#1E88E5' }}>
         <MDBContainer fluid>
           <MDBNavbarBrand href='#'>
             <img
