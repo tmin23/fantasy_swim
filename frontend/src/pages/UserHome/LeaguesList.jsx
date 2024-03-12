@@ -1,6 +1,7 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
 import {Grid, Paper, Box, ButtonBase} from '@mui/material'
+import {Link} from 'react-router-dom'
 
 const Item = styled(Paper)({
     textAlign: 'center',
@@ -17,9 +18,11 @@ export default function LeaguesList() {
         <Box sx={{ flexGrow: 1, marginTop: "50px", marginLeft: "20px", marginRight: "20px" }}>
             <Grid container spacing={3}>
                 <Grid item xs>
-                    <CustomButtonBase component={Item}>
-                        League 1
-                    </CustomButtonBase>
+                    <Link to="/LeagueHome">
+                        <CustomButtonBase component={Item}>
+                            League 1
+                        </CustomButtonBase>
+                    </Link>
                 </Grid>
                 <Grid item xs>
                     <CustomButtonBase component={Item}>

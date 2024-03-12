@@ -11,7 +11,7 @@ export default function App() {
     return (
       <MDBNavbar expand='lg' light style={{ backgroundColor: '#1E88E5' }}>
         <MDBContainer fluid>
-          <MDBNavbarBrand href='../UserHome'>
+          <MDBNavbarBrand href='/'>
             <img
               src={swimcloudlogo}
               height='40'
@@ -23,7 +23,8 @@ export default function App() {
         </MDBContainer>
         <div style= {{position: 'fixed', right: "30px"}}>
           <span>
-            Profile info
+            {/* This will be the users username?? */}
+            Username
           </span>
         </div>
       </MDBNavbar>

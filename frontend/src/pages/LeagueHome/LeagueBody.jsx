@@ -9,9 +9,10 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Typography } from "@mui/material";
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
+// import Button from '@mui/material/Button';
+import {Menu, MenuItem, Button} from '@mui/material';
+// import MenuItem from '@mui/material/MenuItem';
+import {Link} from 'react-router-dom'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -59,9 +60,9 @@ export default function Body() {
         onClick={handleClick}
       >
         {/* This should be your first leage that you have joined for "Main League" */}
-        <Typography variant="h2" color = 'common.black'>
+        <Typography variant="h5" color = 'common.black'>
         {/* Should pull from database to the league name */}
-        Leagues
+        Your Team
         </Typography>
       </Button>
       <Menu id = 'basic-menu'
@@ -70,9 +71,11 @@ export default function Body() {
         onClose={handleClose}
         MenuListProps={{'aria-labelledby': 'basic-button'}}
       >
-        {/* Pull from database to get list of league user is in */}
-        <MenuItem onClick={handleClose}>Liberty League</MenuItem> 
-        <MenuItem onClick={handleClose}>New England Small College Athletic Conference</MenuItem>
+        {/* Pull from database to get all users within the League */}
+        <MenuItem onClick={handleClose}>Tony</MenuItem> 
+        <MenuItem onClick={handleClose}>Mike</MenuItem>
+        <Link to="/UserHome"><MenuItem onClick={handleClose}>Back to Leagues</MenuItem></Link>
+        
       </Menu>
       
       <TableHead>
