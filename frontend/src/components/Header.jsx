@@ -5,10 +5,11 @@ MDBNavbarBrand,
 MDBNavbarItem } from "mdb-react-ui-kit";
 import swimcloudlogo from "../pages/Assets/swimcloud.png"
 import {Link} from 'react-router-dom'
+import '../pages/LoginSignup/LoginSignup.css'
 
 export default function App() {
     return (
-      <MDBNavbar light bgColor='light'>
+      <MDBNavbar expand='lg' light style={{ backgroundColor: '#1E88E5' }}>
         <MDBContainer fluid>
           <MDBNavbarBrand href='../UserHome'>
             <img

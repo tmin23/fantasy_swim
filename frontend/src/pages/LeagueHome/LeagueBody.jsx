@@ -8,6 +8,10 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Typography } from "@mui/material";
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -29,13 +33,48 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
+
 export default function Body() {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+      setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
   return (
     <TableContainer component={Paper}>
-      <Typography variant="h2" gutterBottom>
-        {/* Should be the league name */}
-        Liberty League
-      </Typography>
+      <Button id = 'basic-button'
+        aria-controls = {open ? 'basic-menu' : undefined}
+        aria-haspopup = 'true'
+        aria-expanded = {open ? 'true': undefined}
+        onClick={handleClick}
+      >
+        {/* This should be your first leage that you have joined for "Main League" */}
+        <Typography variant="h2" color = 'common.black'>
+        {/* Should pull from database to the league name */}
+        Leagues
+        </Typography>
+      </Button>
+      <Menu id = 'basic-menu'
+        anchorEl={anchorEl}
+        open = {open}
+        onClose={handleClose}
+        MenuListProps={{'aria-labelledby': 'basic-button'}}
+      >
+        {/* Pull from database to get list of league user is in */}
+        <MenuItem onClick={handleClose}>Liberty League</MenuItem> 
+        <MenuItem onClick={handleClose}>New England Small College Athletic Conference</MenuItem>
+      </Menu>
+      
       <TableHead>
         <TableRow>
             {/* Can keep on adding cells if we want more infomation */}
@@ -44,6 +83,7 @@ export default function Body() {
           <StyledTableCell> Points</StyledTableCell>
         </TableRow>
       </TableHead>
+
       <TableBody>
         {/* Should pull from the database in order to complete the the drafted roster */}
         <StyledTableCell> Mike Dowd</StyledTableCell>
@@ -55,6 +95,7 @@ export default function Body() {
         <StyledTableCell> Rensselaer Polytechnic Insitute Club Team</StyledTableCell>
         <StyledTableCell> More than Mike dowd</StyledTableCell>
       </TableBody>
+
     </TableContainer>
   );
 }
