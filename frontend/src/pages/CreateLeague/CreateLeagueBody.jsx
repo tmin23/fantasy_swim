@@ -51,6 +51,7 @@ export default function App() {
             <h1 style={{margin: 'auto'}}>Create League </h1>
             <Box display= 'flex' sx= {{flexDirection: 'column', paddingTop: '1%'}} style = {{width: '25%', margin: 'auto', justifyContent: 'center'}}>
                 <form onSubmit = {handleSubmit}>
+                <Box display= 'flex' sx= {{flexDirection: 'column', paddingTop: '1%'}} style = {{width: '100%', margin: 'auto', justifyContent: 'center'}}>
                     <FormControl className='forminputs'>
                         <InputLabel htmlFor="my-input">League Name</InputLabel>
                         <Input  onChange={(e) => setLeagueName(e.target.value)}/>
@@ -64,6 +65,7 @@ export default function App() {
                         <Input onChange={(e) => setMeetLink(e.target.value)} />
                     </FormControl>
                     <button type="submit">Create League</button>
+                </Box>
                 </form>
             </Box>
         </Box>
