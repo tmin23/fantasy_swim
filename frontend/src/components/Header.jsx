@@ -11,7 +11,7 @@ export default function App() {
     return (
       <MDBNavbar expand='lg' light style={{ backgroundColor: '#1E88E5' }}>
         <MDBContainer fluid>
-          <MDBNavbarBrand href='/'>
+          <MDBNavbarBrand href='/UserHome'>
             <img
               src={swimcloudlogo}
               height='40'
