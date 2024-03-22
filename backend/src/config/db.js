@@ -1,7 +1,12 @@
 const mongoose = require("mongoose");
+
+require("dotenv").config({path: "../../.env"});
+
 const db =
-  "mongodb+srv://mdowd4848:MRD*goCaps4@fantasyswim.yvo9bof.mongodb.net/fantasy_swimming?retryWrites=true&w=majority&appName=FantasySwim";
-/* Replace <password> with your database password */
+  process.env.MONGO_URL;
+
+
+console.log(db);
 
 mongoose.set("strictQuery", true, "useNewUrlParser", true);
 
