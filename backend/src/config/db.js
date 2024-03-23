@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
+const path = require('path')
 
-require("dotenv").config({path: "../../.env"});
+//Directory that contains db.js on your local computer
+__dirname = "C:/Users/mikey/OneDrive/Documents/Fantasy Swimming/fantasy_swim/backend/src/config"
 
-const db =
-  process.env.MONGO_URL;
+require("dotenv").config({path: path.resolve(__dirname, '../../.env')});
 
-
-console.log(db);
+const db = process.env.MONGO_URL;
 
 mongoose.set("strictQuery", true, "useNewUrlParser", true);
 
