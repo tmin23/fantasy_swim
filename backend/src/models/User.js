@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 const UserSchema = new mongoose.Schema({
     username: {
@@ -12,5 +13,10 @@ const UserSchema = new mongoose.Schema({
     }, {
     collection: 'users'
 });
+
+// encrypts password prior to saving to database
+UserSchema.pre('save', async function () {
+    this.password = await bcrypt.hash(this.password, 12);
+})
 
 module.exports = League = mongoose.model('User', UserSchema);
