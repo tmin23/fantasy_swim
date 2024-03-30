@@ -15,12 +15,12 @@ import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 
 const router = createBrowserRouter([
   {
-    path: "/", 
+    path: "/Login", 
     element: <LoginSignup />,
     errorElement: <ErrorPage/>,
   },
   {
-    path: "/UserHome",
+    path: "/",
     element: <UserHome />,
   },
 
