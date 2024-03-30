@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {
     MDBBtn,
     MDBContainer,
@@ -8,12 +8,80 @@ import {
   }
   from 'mdb-react-ui-kit';
 import swimcloudlogo from "../Assets/swimcloud.png";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import './LoginSignup.css' 
 
 const LoginSignup = () => {
-  return (
+
+    const navigate = useNavigate();
+    const [inputValue, setInputValue] = useState({
+        username: "",
+        password: "",
+    });
+
+    function handleOnChange(e) {
+        const { name, value } = e.target;
+        setInputValue({
+            ...inputValue,
+            [name]: value
+        });
+    }
+
+    // Can make these alerts look nicer later
+    function handleError(err) {
+        alert(err);
+    }
+    function handleSuccess(msg) {
+        alert(msg);
+    }
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+        console.log(inputValue.username);
+        console.log(inputValue.password);
+
+        const formData = {
+            username: inputValue.username,
+            password: inputValue.password
+        };
+        console.log(JSON.stringify(formData));
+
+        try {
+            const response = await fetch('http://localhost:8080/api/users/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'    
+            },
+            credentials: 'include',
+            body: JSON.stringify(formData)
+        });
+
+        let res = await response.json();
+
+        if(res.success) {
+            handleSuccess(res.message);
+            console.log("nav");
+            navigate("/");
+        } else {
+            handleError(res.message);
+            
+        }
+        
+        } catch (error) {
+            console.log(error);
+        }
+        
+        // Resets input values if login fails
+        setInputValue({
+            ...inputValue,
+            username: "",
+            password: "",
+        })
+    }
+
+
+    return (
     <MDBContainer className = 'my-5 gradient-form'>
         <MDBRow>
             <MDBCol col = '6' className = 'mb-5'>
@@ -25,13 +93,12 @@ const LoginSignup = () => {
 
                     <p>Please login to your account</p>
 
-                    <MDBInput wrapperClass='mb-4' label = 'Email address' id = 'form1' type = 'email'/>
-                    <MDBInput wrapperClass='mb-4' label = 'Password' id = 'form2' type = 'password'/>
+                    <MDBInput wrapperClass='mb-4' label="username" name='username' autoFocus value={inputValue.username} onChange={handleOnChange}/>
+                    <MDBInput wrapperClass='mb-4' label="password" name='password' value={inputValue.password} onChange={handleOnChange}/>
 
                     <div className = 'text-center pt-1 mb-5 pb-1'>
-                        <Link to="/UserHome">
-                            <MDBBtn className = 'mb-4 w-100 gradient-custom-2'>Sign in</MDBBtn>
-                        </Link>
+                        
+                        <MDBBtn className = 'mb-4 w-100 gradient-custom-2' type="submit" onClick = {handleSubmit}>Sign in</MDBBtn>
                 
 
                         <Link to = "/LeagueHome">
@@ -66,8 +133,8 @@ const LoginSignup = () => {
             </MDBCol>
         </MDBRow>
     </MDBContainer>
-  )
-}
+    )
+    }
 
-export default LoginSignup
+    export default LoginSignup
 

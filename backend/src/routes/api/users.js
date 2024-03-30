@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Signup, Login } = require("../../controllers/AuthController")
+const { userVerification } = require("../../middlewares/AuthMiddleware");
 
 const User = require('../../models/User');
 
@@ -13,6 +14,11 @@ router.post("/signup", Signup);
 // @desc    Log user in
 // @access  Public
 router.post("/login", Login);
+
+// @route   POST api/users/auth
+// @desc    Check if user is logged in
+// @access  Public
+router.post("/auth", userVerification);
 
 
 
