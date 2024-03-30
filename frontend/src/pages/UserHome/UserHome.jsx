@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from "react-cookie";
-import Header from '../../components/HeaderUserHome';
+import Header from '../../components/Header';
 import LeaguesList from './LeaguesList';
 
 export default function App() {
@@ -27,7 +27,7 @@ export default function App() {
       let res = await response.json();
 
       if (res.status) {
-        setUsername(res.username);
+        setUsername(res.user);
       } else {
         removeCookie("token");
         navigate("/login");
@@ -39,12 +39,13 @@ export default function App() {
 
   function Logout() {
     removeCookie("token");
-    navigate("/signup");
+    navigate("/login");
   }
 
-return (
-  <>
-    <Header username={username} onLogout = {Logout} />
-    <LeaguesList />
-  </>
+
+  return (
+    <>
+      <Header username={username} onLogout = {Logout} />
+      <LeaguesList />
+    </>
 )}

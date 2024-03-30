@@ -1,5 +1,4 @@
-import React from 'react';
-import { Box } from '@mui/material';
+import React, { useState } from 'react';
 import {
     MDBBtn,
     MDBContainer,
@@ -9,10 +8,79 @@ import {
   }
   from 'mdb-react-ui-kit';
 import swimcloudlogo from "../Assets/swimcloud.png";
-import { Link } from 'react-router-dom';
-import Header from '../../components/Header';
+import { Link, useNavigate } from 'react-router-dom';
+import Header from '../../components/HeaderLogin';
 
 export default function App() {
+    const navigate = useNavigate();
+
+    const [inputValue, setInputValue] = useState({
+        username: "",
+        password: "",
+        passwordConfirmation: ""
+    })
+
+    function handleOnChange(e) {
+        const { name, value } = e.target;
+        setInputValue({
+            ...inputValue,
+            [name]: value
+        });
+    }
+
+    // Can make these alerts look nicer later
+    function handleError(err) {
+        alert(err);
+    }
+    function handleSuccess(msg) {
+        alert(msg);
+    }
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+
+        const formData = {
+            username: inputValue.username,
+            password: inputValue.password,
+            passwordConfirmation: inputValue.passwordConfirmation
+        };
+        console.log(JSON.stringify(formData));
+
+        try {
+            const response = await fetch('http://localhost:8080/api/users/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'    
+            },
+            credentials: 'include',
+            body: JSON.stringify(formData)
+        });
+
+        let res = await response.json();
+
+        if(res.success) {
+            handleSuccess(res.message);
+            navigate("/");
+        } else {
+            handleError(res.message);
+            
+        }
+        
+        } catch (error) {
+            console.log(error);
+        }
+        
+        // Resets input values if signup fails
+        setInputValue({
+            ...inputValue,
+            username: "",
+            password: "",
+            passwordConfirmation: ""
+        })
+    }
+
+
+
     return (
         <>
             <Header />
@@ -28,17 +96,16 @@ export default function App() {
 
                         <p style = {{margin: "auto", paddingBottom: "3%"}}>Register an account</p>
 
-                        <MDBInput wrapperClass='mb-4' label = 'Username' id = 'form1' type = 'email'/>
-                        <MDBInput wrapperClass='mb-4' label = 'Password' id = 'form2' type = 'password'/>
-                        <MDBInput wrapperClass='mb-4' label = 'Confirm Password' id = 'form3' type = 'password'/>
+                        <MDBInput wrapperClass='mb-4' value={inputValue.username} autoFocus label = 'Username' name="username" type = 'username' onChange={handleOnChange}/>
+                        <MDBInput wrapperClass='mb-4' value={inputValue.password} label = 'Password' name="password" type = 'password' onChange={handleOnChange}/>
+                        <MDBInput wrapperClass='mb-4' value={inputValue.passwordConfirmation} label = 'Confirm Password' name="passwordConfirmation" type = 'password' onChange={handleOnChange}/>
 
-                        <div className = 'text-center pt-1 mb-5 pb-1'>
-                            <Link to="/UserHome">
-                                <MDBBtn className = 'mb-4 w-100 gradient-custom-2'>Register</MDBBtn>
+                        <div className = 'text-center pt-1 mb-5'>
+                            <MDBBtn className = 'mb-4 w-100 gradient-custom-2' onClick={handleSubmit}>Register</MDBBtn>
+                            <Link to="/Login">
+                                <MDBBtn className = 'mb-4 w-100 gradient-custom-2'>Have an account?</MDBBtn>
                             </Link>
-                    
                         </div>
-
                     </div>
                 </MDBCol>
             </MDBRow>

@@ -61,7 +61,6 @@ const LoginSignup = () => {
 
         if(res.success) {
             handleSuccess(res.message);
-            console.log("nav");
             navigate("/");
         } else {
             handleError(res.message);
@@ -88,22 +87,17 @@ const LoginSignup = () => {
                 <div className = 'd-flex flex-column ms-5'>
                     <div className = 'text-center'>
                         <img src = {swimcloudlogo} style = {{width: '185px'}} alt = 'logo'/>
-                        <h4 className = 'mt-1 mb-5 pb-1'>We are Fantasty Swimming</h4>
+                        <h4 className = 'mt-1 mb-5 pb-1'>We are Fantasy Swimming</h4>
                     </div>
 
                     <p>Please login to your account</p>
 
                     <MDBInput wrapperClass='mb-4' label="username" name='username' autoFocus value={inputValue.username} onChange={handleOnChange}/>
-                    <MDBInput wrapperClass='mb-4' label="password" name='password' value={inputValue.password} onChange={handleOnChange}/>
+                    <MDBInput wrapperClass='mb-4' label="password" name='password' type="password" value={inputValue.password} onChange={handleOnChange}/>
 
                     <div className = 'text-center pt-1 mb-5 pb-1'>
                         
                         <MDBBtn className = 'mb-4 w-100 gradient-custom-2' type="submit" onClick = {handleSubmit}>Sign in</MDBBtn>
-                
-
-                        <Link to = "/LeagueHome">
-                            <MDBBtn className = 'mb-4 w-100 gradient-custom-2'>I DO THE TEST</MDBBtn>
-                        </Link>
 
                         
                         <a className ='text-muted' href = '#!'>Forgot password?</a>

@@ -4,11 +4,14 @@ const bcrypt = require("bcryptjs");
 
 module.exports.Signup = async (req, res, next) => {
     try {
-        const { username, password } = req.body;
+        const { username, password, passwordConfirmation } = req.body;
         const existingUser = await User.findOne({ username });
 
         if (existingUser) {
             return res.json({message: "This username already exists"});
+        }
+        if (password != passwordConfirmation) {
+            return res.json({message: "Passwords do not match"});
         }
 
         const user = await User.create({ username, password });
@@ -21,7 +24,7 @@ module.exports.Signup = async (req, res, next) => {
 
         res
             .status(201)
-            .json({ message: "User signed in successfully", success: true, user})
+            .json({ message: "User signed up successfully", success: true, user})
         
         next();
     } catch (error) {

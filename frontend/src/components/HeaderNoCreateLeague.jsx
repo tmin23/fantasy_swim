@@ -29,10 +29,6 @@ export default function App({username, onLogout}) {
           <span className ="fw-bold">Fantasy Swimming</span>
         </MDBNavbarBrand>
 
-          <Link to="/CreateLeague">
-            <MDBBtn rounded>Create League</MDBBtn>
-          </Link>
-
         <MDBDropdown>
           <MDBDropdownToggle tag='a' className='nav-link' role='button'>
             {username}
