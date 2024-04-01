@@ -9,8 +9,8 @@ const Item = styled(Paper)({
 
 const CustomButtonBase = styled(ButtonBase)({
     width: '100%',
-    height: '9000%',
-    borderRadius: '4px', // Add borderRadius to match the Paper component
+    height: '990%',
+    borderRadius: '10px', // Add borderRadius to match the Paper component
 });
 
 export default function LeaguesList() {
@@ -20,10 +20,12 @@ export default function LeaguesList() {
                 <Grid item xs>
                     <Link to="/LeagueHome">
                         <CustomButtonBase component={Item}>
+                            
                             Hathawayyyyy House League
                         </CustomButtonBase>
-                    </Link>
+                        </Link>
                 </Grid>
+                
                 <Grid item xs>
                     <CustomButtonBase component={Item}>
                         Big Apple League
