@@ -20,7 +20,7 @@ export default function LeaguesList() {
                 <Grid item xs>
                     <Link to="/LeagueHome">
                         <CustomButtonBase component={Item}>
-                            Hathaway House League
+                            Hathawayyyyy House League
                         </CustomButtonBase>
                     </Link>
                 </Grid>
