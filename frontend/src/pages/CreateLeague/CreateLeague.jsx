@@ -13,7 +13,6 @@ import Body from './CreateLeagueBody';
 
   useEffect(() => {
     async function verifyCookie() {
-      console.log("cookie token = ", cookies.token);
       // If there's no token cookie, then user is not logged in
       if(!cookies.token) {
         navigate('/login');
