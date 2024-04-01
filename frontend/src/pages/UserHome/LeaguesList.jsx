@@ -13,6 +13,7 @@ const CustomButtonBase = styled(ButtonBase)({
     borderRadius: '10px', // Add borderRadius to match the Paper component
 });
 
+
 export default function LeaguesList() {
     return (
         <Box sx={{ flexGrow: 1, marginTop: "200px", marginLeft: "50px", marginRight: "50px" }}>
