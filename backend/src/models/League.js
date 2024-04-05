@@ -17,7 +17,10 @@ const LeagueSchema = new mongoose.Schema({
     league_owner: {
         type: mongoose.Types.ObjectId,
         required: true
-    }
+    }, 
+    // teams: {
+    //     type: [Team]
+    // }
     }, {
     collection: 'leagues'
 });

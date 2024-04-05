@@ -3,6 +3,7 @@ const router = express.Router();
 const path = require("path");
 
 const League = require('../../models/League');
+const User = require('../../models/User');
 
 require("dotenv").config({path: path.resolve(__dirname, '../../.env')});
 
@@ -43,8 +44,18 @@ router.post("/", async (req, res) => {
             league_owner = data.id;
         }
     })
+
+    
     League.create({name, meet_link, password, league_owner})
-        .then(league => res.json({message: 'League added', success: true}))
+        .then(league => { //adds league to user's list of leagues
+            return User.updateOne(
+                { _id: league_owner},
+                { $addToSet: { leagues: league._id}});
+            
+        })
+        .then(() => {
+            return res.json({message: 'League added', success: true})
+        })
         .catch(err => {
             console.log(err);
             console.log(req.body)
