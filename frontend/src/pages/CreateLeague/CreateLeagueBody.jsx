@@ -1,9 +1,7 @@
 import React, {useState} from 'react';
 import { Box, FormControl, InputLabel, Input, FormHelperText } from '@mui/material';
 import './createleague.css'
-
-
-
+import video from '../videos_images/video_3.mp4'
 
 export default function App() {
     const [leagueName, setLeagueName] = useState('');
@@ -47,28 +45,30 @@ export default function App() {
     }
 
     return (
-        <Box display='flex' sx = {{ flexDirection: 'column', marginTop: '2%'}}>
-            <h1 style={{margin: 'auto'}}>Create League </h1>
-            <Box display= 'flex' sx= {{flexDirection: 'column', paddingTop: '1%'}} style = {{width: '25%', margin: 'auto', justifyContent: 'center'}}>
-                <form onSubmit = {handleSubmit}>
-                <Box display= 'flex' sx= {{flexDirection: 'column', paddingTop: '1%'}} style = {{width: '100%', margin: 'auto', justifyContent: 'center'}}>
-                    <FormControl className='forminputs'>
-                        <InputLabel htmlFor="my-input">League Name</InputLabel>
-                        <Input  onChange={(e) => setLeagueName(e.target.value)}/>
-                    </FormControl>
-                    <FormControl className='forminputs'>
-                        <InputLabel htmlFor="my-input">League Password</InputLabel>
-                        <Input  />
-                    </FormControl>
-                    <FormControl className='forminputs'>
-                        <InputLabel htmlFor="my-input">Meet link</InputLabel>
-                        <Input onChange={(e) => setMeetLink(e.target.value)} />
-                    </FormControl>
-                    <button type="submit">Create League</button>
-                </Box>
-                </form>
-            </Box>
-        </Box>
+        <div className="main">
+       <video autoPlay muted loop id="video-bg">
+        <source src={video} type="video/mp4" />
+    Create League Page.
+    </video>
 
-    )
+       
+        <div className="content">
+            <h2><span>Build Your Dream League!🏊‍♂️</span></h2>
+            <p className="par">Your ultimate destination for creating your custom dream swim leagues!!! <br /> Unleash your inner team manager, strategize like a pro, <br /> Make a splash in the world of fantasy sports! <br /> Create your league now!! <br /> let the waves of victory carry you to greatness!!!</p>
+
+            <button className="cn">DIVE IN!</button>
+
+            <div className="form">
+                <h2>Create League</h2>
+                <input type="text" name="league_name" placeholder="League Name" value={leagueName} onChange={(e) => setLeagueName(e.target.value)} />
+                
+                <input type="password" name="league_password" placeholder="League Password" value={leaguePassword} onChange={(e) => setLeaguePassword(e.target.value)} />
+              
+                <input type="text" name="meet_link" placeholder="Meet Link" value={meetLink} onChange={(e) => setMeetLink(e.target.value)} />
+               
+                <button className="btnn" onClick={handleSubmit}>Create</button>
+            </div>
+        </div>
+    </div>
+);
 }
