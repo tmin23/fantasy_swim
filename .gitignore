@@ -1,2 +1,7 @@
 /node_modules
 /backend/.env
+backend/SwimScraper/__init__.py
+backend/SwimScraper/__pycache__/__init__.cpython-311.pyc
+backend/SwimScraper/__pycache__/SwimScraper.cpython-311.pyc
+backend/SwimScraper/SwimScraper.py
+backend/SwimScraper/getTeamList.py
