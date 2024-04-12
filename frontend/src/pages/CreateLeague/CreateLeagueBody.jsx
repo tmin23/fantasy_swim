@@ -8,12 +8,21 @@ export default function App() {
     const [leaguePassword, setLeaguePassword] = useState('');
     const [meetLink, setMeetLink] = useState('');
 
+    // Can make these alerts look nicer later
+    function handleError(err) {
+        alert(err);
+    }
+    function handleSuccess(msg) {
+        alert(msg);
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         const formData = {
             name: leagueName,
-            meet_link: meetLink
+            meet_link: meetLink,
+            password: leaguePassword
         };
         console.log(JSON.stringify(formData));
 
@@ -25,19 +34,31 @@ export default function App() {
                 headers: {
                     'Content-Type': 'application/json'    
                 },
+                credentials: 'include',
                 body: JSON.stringify(formData)
             });
+
+            let res = await response.json()
 
             if (!response.ok) {
                 throw new Error('Failed to create league');
             }
 
-            //reset form fields after good submission
-            setLeagueName('');
-            setLeaguePassword('');
-            setMeetLink('');
+            if (res.success) {
+                //reset form fields after submission
+                setLeagueName('');
+                setLeaguePassword('');
+                setMeetLink('');
 
-            alert('League created');
+                handleSuccess(res.message);
+                
+            }
+            else {
+                handleError(res.message);
+            }
+            
+            
+
         } catch (error) {
             console.error('Error creating league', error);
             alert('Failed creating league');
