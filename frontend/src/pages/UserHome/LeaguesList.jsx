@@ -18,9 +18,9 @@ export default function LeaguesList() {
         <div>        
     
             <section class="main">
-              <div class="main-top">
+              {/* <div class="main-top">
                 <h1>League List</h1>
-              </div>
+              </div> */}
 
              <div class="users">
                 <div class="card card1">
@@ -131,6 +131,8 @@ export default function LeaguesList() {
                         <td>Gloria</td>
                         <td><button onClick={handleConnectClick}>Connect</button></td>
                       </tr>
+
+                      
 
                       <tr class="active">
                         <td>02</td>

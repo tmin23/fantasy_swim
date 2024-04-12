@@ -13,7 +13,7 @@ import '../pages/LoginSignup/LoginSignup.css'
 
 export default function App({username, onLogout}) {
     return (
-      <MDBNavbar expand='lg' light style={{ backgroundColor: '#1E88E5' }}>
+      <MDBNavbar expand='lg' light style={{ backgroundColor: '#1E88E5', width: '100%' }}>
         <MDBContainer fluid>
           <MDBNavbarBrand href='#'>
             <img
