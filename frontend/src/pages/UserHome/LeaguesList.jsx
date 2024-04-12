@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './LeaguesList.css';
 import LeagueBody from '../LeagueHome/LeagueBody.jsx';
@@ -10,10 +10,24 @@ import picture_4 from '../videos_images/picture_4.jpg';
 import picture_7 from '../videos_images/picture_7.jpg';
 
 
-export default function LeaguesList() {
+export default function LeaguesList({getLeagues}) {
   const handleConnectClick = () => {
     window.location.href = 'https://meet.google.com';
-};
+  };
+
+  const [leagues, setLeagues] = useState([]);
+
+  useEffect( () => {
+    async function fetch_leagues() {
+      const fetched_leagues =  await getLeagues();
+      setLeagues(fetched_leagues);
+    }
+
+    fetch_leagues();
+  }, []);
+  
+
+
     return (
         <div>        
     
@@ -23,87 +37,34 @@ export default function LeaguesList() {
               </div> */}
 
              <div class="users">
-                <div class="card card1">
-                <img src={picture_1} alt="Hathaway House"/>
 
-                  <h5>Hathaway House </h5>
-                  <p>Troy, New York</p>
-                  <div class="per">
-                    <table>
-                      <tr>
-                        <td><span>9🏅</span></td>
-                        <td><span>2004</span></td>
-                      </tr>
-                      <tr>
-                        <td>Medal</td>
-                        <td>Year</td>
-                      </tr>
-                    </table>
-                   </div>
-                   <Link to="/LeagueBody">
-                    <button>Profile</button>
-                </Link>
-            </div>
-                
+                {leagues.map((league, index) => (
+                  <div key = {index} class="card card1">
+                    <img src={picture_1} alt={league.name}/>
 
-                <div class="card card2">
-                <img src={picture_4} alt="Big Apple League"/>
-                  <h5>Big Apple League</h5>
-                  <p>Troy, New York</p>
-                  <div class="per">
-                    <table>
-                      <tr>
-                        <td><span>7🏅</span></td>
-                        <td><span>2004</span></td>
-                      </tr>
-                      <tr>
-                        <td>Medal</td>
-                        <td>Year</td>
-                      </tr>
-                    </table>
-                  </div>
-                  <button>Profile</button>
-                </div>
-                
+                    <h5>{league.name} </h5>
+                    <p>Troy, New York</p>
+                    <div class="per">
+                      <table>
+                        <tbody>
+                        <tr>
+                          <td><span>9🏅</span></td>
+                          <td><span>2004</span></td>
+                        </tr>
+                        <tr>
+                          <td>Medal</td>
+                          <td>Year</td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <Link to="/LeagueBody">
+                      <button>Select</button>
+                    </Link>
 
-                <div class="card card3">
-                <img src={picture_6} alt="RPI Swim League"/>
-                  <h5>RPI SWIM LEAGUE</h5>
-                  <p>Troy, NY</p>
-                  <div class="per">
-                    <table>
-                      <tr>
-                        <td><span>5🏅</span></td>
-                        <td><span>2004</span></td>
-                      </tr>
-                      <tr>
-                        <td>Medal</td>
-                        <td>Year</td>
-                      </tr>
-                    </table>
                   </div>
-                  <button>Profile</button>
-                </div>
+                ))}
                 
-                
-                <div class="card card4">
-                <img src={picture_7} alt="Naija League"/>
-                  <h5>NAIJA LEAGUE</h5>
-                  <p>Troy, NY</p>
-                  <div class="per">
-                    <table>
-                      <tr>
-                        <td><span>5🏅</span></td>
-                        <td><span>2004</span></td>
-                      </tr>
-                      <tr>
-                        <td>Medal</td>
-                        <td>Year</td>
-                      </tr>
-                    </table>
-                  </div>
-                  <button>Profile</button>
-                </div>
               </div>
         
               <section class="ranking">

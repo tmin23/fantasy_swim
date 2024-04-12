@@ -41,10 +41,21 @@ export default function App() {
     navigate("/login");
   }
 
+  async function getLeagues() {
+
+    const response = await fetch('http://localhost:8080/api/users/leagues', {
+      method: 'GET',
+      credentials: 'include'
+    });
+
+    let res = await response.json();
+    return res.leagues;
+  }
+
 
   return (
     <>
       <Header username={username} onLogout = {Logout} />
-      <LeaguesList />
+      <LeaguesList getLeagues = {getLeagues}/>
     </>
 )}
