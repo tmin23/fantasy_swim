@@ -42,17 +42,22 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-export default function Body({getLeagueInfo}) {
+export default function Body({getLeagueInfo, getTeamInfo}) {
   const [leagueName, setLeagueName] = useState("");
 
-  useEffect( () => {
+  useEffect( () => { //gets the league info on page render
     async function fetch_leagues() {
       let leagueInfo = await getLeagueInfo();
       setLeagueName(leagueInfo.name);
     }
 
+    async function fetch_team_info() {
+      let teamInfo = await getTeamInfo();
+      console.log(teamInfo.team);
+    }
+
     fetch_leagues();
-    
+    fetch_team_info();
   }, []);
 
 

@@ -18,9 +18,9 @@ const LeagueSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         required: true
     }, 
-    // teams: {
-    //     type: [Team]
-    // }, 
+    teams: {
+        type: [mongoose.Types.ObjectId]
+    }, 
     swimmers: {
         type: [mongoose.Types.ObjectId] //holds the ids of the swimmers that are in the league
     }

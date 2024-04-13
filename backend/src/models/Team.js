@@ -7,12 +7,15 @@ const TeamSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    owner: {
+        type: mongoose.Types.ObjectId
+    },
     roster: {
         type: [mongoose.Types.ObjectId], //ids of the swimmers that are on the roster
     }, 
     leagueId: {
         type: mongoose.Types.ObjectId //the id of the league that the team is in
-    },
+    }}, {
     collection: 'teams'
 });
 

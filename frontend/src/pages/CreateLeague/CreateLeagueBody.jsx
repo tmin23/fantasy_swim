@@ -7,6 +7,7 @@ export default function App() {
     const [leagueName, setLeagueName] = useState('');
     const [leaguePassword, setLeaguePassword] = useState('');
     const [meetLink, setMeetLink] = useState('');
+    const [teamName, setTeamName] = useState('');
 
     // Can make these alerts look nicer later
     function handleError(err) {
@@ -22,7 +23,8 @@ export default function App() {
         const formData = {
             name: leagueName,
             meet_link: meetLink,
-            password: leaguePassword
+            password: leaguePassword,
+            teamName: teamName
         };
         console.log(JSON.stringify(formData));
 
@@ -49,6 +51,7 @@ export default function App() {
                 setLeagueName('');
                 setLeaguePassword('');
                 setMeetLink('');
+                setTeamName('');
 
                 handleSuccess(res.message);
                 
@@ -84,6 +87,8 @@ export default function App() {
                 <input type="text" name="league_name" placeholder="League Name" value={leagueName} onChange={(e) => setLeagueName(e.target.value)} />
                 
                 <input type="password" name="league_password" placeholder="League Password" value={leaguePassword} onChange={(e) => setLeaguePassword(e.target.value)} />
+
+                <input type="text" name="teamName" placeholder="Team Name" value={teamName} onChange={(e) => setTeamName(e.target.value)} />
               
                 <input type="text" name="meet_link" placeholder="Meet Link" value={meetLink} onChange={(e) => setMeetLink(e.target.value)} />
                
