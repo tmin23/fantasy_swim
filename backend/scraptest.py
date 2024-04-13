@@ -12,7 +12,37 @@ from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.common.action_chains import ActionChains
 from webdriver_manager.chrome import ChromeDriverManager
 import pandas as pd
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
+import os 
+from dotenv import load_dotenv
 
+# Get the MongoDb url from .env file
+load_dotenv()
+uri = os.getenv('MONGO_URL')
+client = MongoClient(uri)
+
+# print(client.list_database_names())
+
+mydb = client['fantasy_swimming']
+# print(mydb.list_collection_names())
+mycol = mydb['users']
+
+test_user = {'username': "testPython", 'password': 'IWatchValorant'}
+
+mycol.insert_one(test_user)
+
+
+
+
+
+
+
+
+
+
+
+# ROSTER GETTING 
 meetlink = "https://www.swimcloud.com/results/296313/"
 # meetlink = "https://www.swimcloud.com/results/293735/"
 
@@ -44,5 +74,5 @@ def getMeetRosters(team_dict):
         for i in team_roster:
             print(i)
 
-allTeams = getMeetTeams(meetlink)
-getMeetRosters(allTeams)
+# allTeams = getMeetTeams(meetlink)
+# getMeetRosters(allTeams)
