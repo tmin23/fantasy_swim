@@ -15,4 +15,4 @@ const SwimmerSchema = new mongoose.Schema({
 });
 
 
-module.exports = League = mongoose.model('Swimmer', LeagueSchema);
+module.exports = Swimmer = mongoose.model('Swimmer', SwimmerSchema);
