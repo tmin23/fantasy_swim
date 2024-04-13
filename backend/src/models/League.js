@@ -20,7 +20,10 @@ const LeagueSchema = new mongoose.Schema({
     }, 
     // teams: {
     //     type: [Team]
-    // }
+    // }, 
+    swimmers: {
+        type: [mongoose.Types.ObjectId] //holds the ids of the swimmers that are in the league
+    }
     }, {
     collection: 'leagues'
 });

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { Signup, Login } = require("../../controllers/AuthController")
 const { userVerification } = require("../../middlewares/AuthMiddleware");
+const { getLeagues } = require('../../controllers/UserController')
 
 const User = require('../../models/User');
 
@@ -19,6 +20,13 @@ router.post("/login", Login);
 // @desc    Check if user is logged in
 // @access  Public
 router.post("/auth", userVerification);
+
+
+
+// @route   POST api/users/leagues
+// @desc    Gets basic league info of all the leagues the user is in
+// @access  Public
+router.get("/leagues", getLeagues)
 
 
 
