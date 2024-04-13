@@ -38,8 +38,8 @@ export default function LeaguesList({getLeagues}) {
 
              <div class="users">
 
-                {leagues.map((league, index) => (
-                  <div key = {index} class="card card1">
+                {leagues.map((league) => (
+                  <div key = {league._id} class="card card1">
                     <img src={picture_1} alt={league.name}/>
 
                     <h5>{league.name} </h5>
@@ -58,7 +58,7 @@ export default function LeaguesList({getLeagues}) {
                         </tbody>
                       </table>
                     </div>
-                    <Link to="/LeagueBody">
+                    <Link to={`/LeagueHome/${league._id}`}>
                       <button>Select</button>
                     </Link>
 

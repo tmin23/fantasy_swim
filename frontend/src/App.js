@@ -25,7 +25,7 @@ const router = createBrowserRouter([
   },
 
   {
-    path: "/LeagueHome",
+    path: "/LeagueHome/:leagueId",
     element: <LeagueHome />,
   },
   {

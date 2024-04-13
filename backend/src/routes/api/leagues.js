@@ -5,19 +5,17 @@ const path = require("path");
 const League = require('../../models/League');
 const User = require('../../models/User');
 
+const {getLeague} = require('../../controllers/LeagueController');
+
 require("dotenv").config({path: path.resolve(__dirname, '../../.env')});
 
 const jwt = require("jsonwebtoken");
 
 
-// @route   GET api/leagues
-// @desc    Get all leagues that user is in
+// @route   GET api/leagues/:leagueId
+// @desc    Get league info of this particular league
 // @access  Public
-router.get('/', (req, res) => {
-    League.find()
-        .then(leagues => res.json(leagues))
-        .catch(err => res.status(404).json({noleaguesfound: 'No leagues found'}));
-});
+router.get('/:leagueId', getLeague);
 
 
 // @route   POST api/leagues
@@ -62,5 +60,6 @@ router.post("/", async (req, res) => {
             return res.status(400).json({error:'unable to add league :('});
         })
   });
+
 
 module.exports = router;

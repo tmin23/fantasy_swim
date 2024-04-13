@@ -11,6 +11,9 @@ const SwimmerSchema = new mongoose.Schema({
     finascore: {
         type: String, 
     }, 
+    leagueId: {
+        type: mongoose.Types.ObjectId //the id of the league that the swimmer is in
+    },
     collection: 'swimmers'
 });
 

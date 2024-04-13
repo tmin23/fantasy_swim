@@ -31,6 +31,7 @@ module.exports.getLeagues = async (req, res, next) => {
                 const league = await League.findById(leagues[i]);
 
                 leagueInfo.push({
+                    "_id": league._id,
                     "name": league.name
                 })
             }

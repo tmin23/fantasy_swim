@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -42,7 +42,20 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-export default function Body() {
+export default function Body({getLeagueInfo}) {
+  const [leagueName, setLeagueName] = useState("");
+
+  useEffect( () => {
+    async function fetch_leagues() {
+      let leagueInfo = await getLeagueInfo();
+      setLeagueName(leagueInfo.name);
+    }
+
+    fetch_leagues();
+    
+  }, []);
+
+
   const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -62,7 +75,7 @@ export default function Body() {
         {/* This should be your first leage that you have joined for "Main League" */}
         <Typography variant="h5" color = 'common.black'>
         {/* Should pull from database to the league name */}
-        Your Team
+        League Name: {leagueName}
         </Typography>
       </Button>
       <Menu id = 'basic-menu'
@@ -74,7 +87,6 @@ export default function Body() {
         {/* Pull from database to get all users within the League */}
         <MenuItem onClick={handleClose}>Tony</MenuItem> 
         <MenuItem onClick={handleClose}>Mike</MenuItem>
-        <Link to="/UserHome"><MenuItem onClick={handleClose}>Back to Leagues</MenuItem></Link>
         
       </Menu>
       
