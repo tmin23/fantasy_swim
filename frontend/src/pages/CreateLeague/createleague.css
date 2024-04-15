@@ -177,7 +177,7 @@ ul li a:hover{
 /*here is the moving down of the form box. the top*/
 .form{
     width: 270px;
-    height: 369px;
+    height: 400px;
     background: linear-gradient(to top, rgba(0,0,0,0.8)50%,rgba(0,0,0,0.8)50%);
     position: absolute;
     top: 25px;

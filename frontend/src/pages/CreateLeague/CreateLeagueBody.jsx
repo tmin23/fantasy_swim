@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Box, FormControl, InputLabel, Input, FormHelperText } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 import './createleague.css'
 import video from '../videos_images/video_3.mp4'
 
@@ -8,6 +8,7 @@ export default function App() {
     const [leaguePassword, setLeaguePassword] = useState('');
     const [meetLink, setMeetLink] = useState('');
     const [teamName, setTeamName] = useState('');
+    const [loading, setLoading] = useState(false);
 
     // Can make these alerts look nicer later
     function handleError(err) {
@@ -19,6 +20,7 @@ export default function App() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
 
         const formData = {
             name: leagueName,
@@ -42,11 +44,9 @@ export default function App() {
 
             let res = await response.json()
 
-            if (!response.ok) {
-                throw new Error('Failed to create league');
-            }
 
             if (res.success) {
+                setLoading(false);
                 //reset form fields after submission
                 setLeagueName('');
                 setLeaguePassword('');
@@ -57,12 +57,14 @@ export default function App() {
                 
             }
             else {
+                setLoading(false);
                 handleError(res.message);
             }
             
             
 
         } catch (error) {
+            setLoading(false);
             console.error('Error creating league', error);
             alert('Failed creating league');
         }
@@ -92,7 +94,17 @@ export default function App() {
               
                 <input type="text" name="meet_link" placeholder="Meet Link" value={meetLink} onChange={(e) => setMeetLink(e.target.value)} />
                
-                <button className="btnn" onClick={handleSubmit}>Create</button>
+                <Button
+                    className = 'btnn'
+                    style={{ marginTop: '15px', marginLeft: '10px' }}
+                    variant="contained"
+                    color="primary"
+                    disabled={loading}
+                    onClick={handleSubmit}
+                    startIcon={loading ? <CircularProgress size={20} color="inherit" /> : null}
+                    >
+                    {loading ? 'Loading...' : 'Create'}
+                </Button>
             </div>
         </div>
     </div>
