@@ -55,32 +55,6 @@ body{
 }
   
 
-a{
-  position: relative;
-  width: 280px;
-  font-size: 14px;
-  color: #000;
-  display: table;
-  padding: 10px;
-}
-
-
-
-a:hover{
-  background: #1E90FF;
-}
-a:hover i{
-  color: #fff;
-  transition: 0.5s;
-}
-
-
-
-.container{
-  display: flex;
-  
-}
-
 /* MAin Section */
 .main{
   position: relative;
@@ -108,14 +82,15 @@ a:hover i{
   width: 100%;
 }
 .users .card{
-  width: 25%;
+  width: 30%;
   margin: 10px;
   background: #fff;
   text-align: center;
   border-radius: 10px;
   padding: 10px;
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
- 
+  align-items: center;
+  color: #000; 
  }
 .users .card img{
   width: 70px;
@@ -209,7 +184,21 @@ a:hover i{
 }
 
 
+.button-link {
+  display: inline-block; /* Change to inline-block */
+  width: 100%; /* Remove width: 100% */
+  text-align: center;
+}
 
+.button-link button {
+  width: 100%; /* Make the button occupy full width */
+}
+
+
+.button-link:hover button {
+  background: #1E90FF; /* Apply background color to the button */
+  color: #fff; /* Change text color of the button */
+}
 
 
 /*Meet Link section  */
@@ -232,6 +221,7 @@ a:hover i{
   min-width: 100%;
   overflow: hidden;
   border-radius: 5px 5px 0 0;
+  
 }
 table thead tr{
   color: #fff;
@@ -248,6 +238,7 @@ table thead tr{
 }
 .table tbody tr:nth-of-type(odd){
   background: #f3f3f3;
+  color: #000; 
 }
 .table tbody tr.active{
   font-weight: bold;
@@ -255,6 +246,7 @@ table thead tr{
 }
 .table tbody tr:last-of-type{
   border-bottom: 2px solid #1E90FF;
+  color: #000; 
 }
 .table button{
   padding: 6px 20px;
@@ -267,6 +259,7 @@ table thead tr{
   background: #1E90FF;
   color: #fff;
   transition: 0.5rem;
+  
 
 
 

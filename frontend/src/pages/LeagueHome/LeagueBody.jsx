@@ -1,104 +1,178 @@
 import React from "react";
-import { styled } from "@mui/material/styles";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import { Typography } from "@mui/material";
-import Stack from '@mui/material/Stack';
-// import Button from '@mui/material/Button';
-import {Menu, MenuItem, Button} from '@mui/material';
-// import MenuItem from '@mui/material/MenuItem';
-import {Link} from 'react-router-dom'
+import './LeagueBody.css';
+import { Link } from "react-router-dom";
+import { Typography, Button, Menu, MenuItem } from "@mui/material";
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.white,
-    color: theme.palette.common.black,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
-}));
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
 
 export default function Body() {
   const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-      setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-      setAnchorEl(null);
-    };
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+
+   
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
-    <TableContainer component={Paper}>
-      <Button id = 'basic-button'
-        aria-controls = {open ? 'basic-menu' : undefined}
-        aria-haspopup = 'true'
-        aria-expanded = {open ? 'true': undefined}
+    <div>
+      <Button
+        id="basic-button"
+        aria-controls={open ? "basic-menu" : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
       >
-        {/* This should be your first leage that you have joined for "Main League" */}
-        <Typography variant="h5" color = 'common.black'>
-        {/* Should pull from database to the league name */}
-        Your Team
-        </Typography>
-      </Button>
-      <Menu id = 'basic-menu'
-        anchorEl={anchorEl}
-        open = {open}
-        onClose={handleClose}
-        MenuListProps={{'aria-labelledby': 'basic-button'}}
-      >
-        {/* Pull from database to get all users within the League */}
-        <MenuItem onClick={handleClose}>Tony</MenuItem> 
-        <MenuItem onClick={handleClose}>Mike</MenuItem>
-        <Link to="/UserHome"><MenuItem onClick={handleClose}>Back to Leagues</MenuItem></Link>
         
+      </Button>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{ "aria-labelledby": "basic-button" }}
+      >
+        <MenuItem onClick={handleClose}>Tony</MenuItem>
+        <MenuItem onClick={handleClose}>Mike</MenuItem>
+        <MenuItem component={Link} to="/UserHome" onClick={handleClose}>
+          Back to Leagues
+        </MenuItem>
       </Menu>
-      
-      <TableHead>
-        <TableRow>
-            {/* Can keep on adding cells if we want more infomation */}
-          <StyledTableCell> Swimmers</StyledTableCell>
-          <StyledTableCell> Team</StyledTableCell>
-          <StyledTableCell> Points</StyledTableCell>
-        </TableRow>
-      </TableHead>
 
-      <TableBody>
-        {/* Should pull from the database in order to complete the the drafted roster */}
-        <StyledTableCell> Mike Dowd</StyledTableCell>
-        <StyledTableCell> Rensselaer Polytechnic Insitute</StyledTableCell>
-        <StyledTableCell> 2</StyledTableCell>
-      </TableBody>
-      <TableBody>
-        <StyledTableCell> Tony Min</StyledTableCell>
-        <StyledTableCell> Rensselaer Polytechnic Insitute Club Team</StyledTableCell>
-        <StyledTableCell> More than Mike dowd</StyledTableCell>
-      </TableBody>
+      <section className="ranking">
+        <div className="ranking-list">
+          <h1>Your Team</h1>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Swimmers</th>
+                <th>Team</th>
+                <th>Style</th>
+                <th>Points</th>
+                <th>Profile</th>
+              
+              </tr>
 
-    </TableContainer>
+            </thead>
+
+              <tbody>
+                  <tr>
+                    <td>01</td>
+                    <td>🧑Mike Dowd</td>
+                    <td>Rensselaer Polytechnic Institute Team</td>
+                    <th>Freestyle</th>
+                    <td>8</td>
+                    <td><button onClick={() => window.location.href='https://www.swimcloud.com/swimmer/619459/'}>View Profile</button></td>
+                  </tr>
+
+
+                  <tr class="active">
+                    <td>02</td>
+                    <td>🧑Tony Min</td>
+                    <td>Rensselaer Polytechnic Institute Team</td>
+                    <th>Freestyle</th>
+                    <td>7</td>
+                    <td><button onClick={() => window.location.href='https://www.swimcloud.com/swimmer/409873/'}>View Profile</button></td>
+                  </tr>
+
+
+                  <tr>
+                    <td>03</td>
+                    <td>🧑Dan Chen</td>
+                    <td>Rensselaer Polytechnic Institute Team</td>
+                    <th>Freestyle</th>
+                    <td>7</td>
+                    <td><button onClick={() => window.location.href='https://www.swimcloud.com/swimmer/1180940/'}>View Profile</button></td>
+                  </tr>
+
+                
+                <tr class="active">
+                  <td>04</td>
+                  <td>🧑Anthony Acciani</td>
+                  <td>Rensselaer Polytechnic Institute Team</td>
+                  <th>Freestyle</th>
+                  <td>7</td>
+                  <td><button onClick={() => window.location.href='https://www.swimcloud.com/swimmer/549223/'}>View Profile</button></td>
+                  </tr>
+
+
+
+                <tr>
+                  <td>05</td>
+                  <td>🧑Jake Fassora</td>
+                  <td>Rensselaer Polytechnic Institute Team</td>
+                  <th>Freestyle</th>
+                  <td>5</td>
+                  <td><button onClick={() => window.location.href='https://www.swimcloud.com/swimmer/2310254/'}>View Profile</button></td>
+                  </tr>
+
+
+
+                <tr class="active">
+                <td>06</td>
+                <td>🧑Ethan Gadbois</td>
+                <td>Rensselaer Polytechnic Institute Team</td>
+                <th>Freestyle</th>
+                <td>4</td>
+                <td><button onClick={() => window.location.href='https://www.swimcloud.com/swimmer/619020/'}>View Profile</button></td>
+                  </tr>
+
+
+
+                <tr>
+                <td>07</td>
+                <td>🧑Jimmy Zhen</td>
+                <td>Rensselaer Polytechnic Institute Team</td>
+                <th>Freestyle</th>
+                <td>4</td>
+                <td><button onClick={() => window.location.href='https://www.swimcloud.com/swimmer/1321677/'}>View Profile</button></td>
+                  </tr>
+
+
+
+                <tr class="active">
+                <td>08</td>
+                <td>🧑William Tan</td>
+                <td>Rensselaer Polytechnic Institute Team</td>
+                <th>Freestyle</th>
+                <td>2</td>
+                <td><button onClick={() => window.location.href='https://www.swimcloud.com/swimmer/671785/'}>View Profile</button></td>
+                  </tr>
+
+
+
+                <tr>
+                <td>09</td>
+                <td>🧑Andrew Palmer</td>
+                <td>Rensselaer Polytechnic Institute Team</td>
+                <th>Freestyle</th>
+                <td>2</td>
+                <td><button onclick="window.location.href='https://www.swimcloud.com/swimmer/478353/'">View Profile</button></td>
+                </tr>
+
+                <tr class="active">
+                <td>10</td>
+                <td>🧑Dan Savidge</td>
+                <td>Rensselaer Polytechnic Institute Team</td>
+                <th>Freestyle</th>
+                <td>2</td>
+                <td><button onClick={() => window.location.href='https://www.swimcloud.com/swimmer/818663/'}>View Profile</button></td>
+                  </tr>
+
+
+            </tbody>
+          </table>
+
+
+
+
+        </div>
+      </section>
+    </div>
   );
 }

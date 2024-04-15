@@ -6,6 +6,7 @@ const path = require('path')
 require("dotenv").config({path: path.resolve(__dirname, '../../.env')});
 
 const db = process.env.MONGO_URL;
+console.log(process.env.MONGO_URL)
 
 mongoose.set("strictQuery", true, "useNewUrlParser", true);
 

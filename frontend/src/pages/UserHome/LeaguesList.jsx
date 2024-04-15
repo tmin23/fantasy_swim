@@ -26,7 +26,7 @@ export default function LeaguesList() {
                 <div class="card card1">
                 <img src={picture_1} alt="Hathaway House"/>
 
-                  <h5>Hathaway House </h5>
+                  <h5>RPI Swim League </h5>
                   <p>Troy, New York</p>
                   <div class="per">
                     <table>
@@ -40,7 +40,7 @@ export default function LeaguesList() {
                       </tr>
                     </table>
                    </div>
-                   <Link to="/LeagueBody">
+                   <Link to="/LeagueHome" className="button-link">
                     <button>Profile</button>
                 </Link>
             </div>
@@ -48,7 +48,7 @@ export default function LeaguesList() {
 
                 <div class="card card2">
                 <img src={picture_4} alt="Big Apple League"/>
-                  <h5>Big Apple League</h5>
+                  <h5>Hathaway House</h5>
                   <p>Troy, New York</p>
                   <div class="per">
                     <table>
@@ -62,13 +62,15 @@ export default function LeaguesList() {
                       </tr>
                     </table>
                   </div>
-                  <button>Profile</button>
-                </div>
+                  <Link to="/LeagueHome" className="button-link">
+                    <button>Profile</button>
+                </Link>
+            </div>
                 
 
                 <div class="card card3">
                 <img src={picture_6} alt="RPI Swim League"/>
-                  <h5>RPI SWIM LEAGUE</h5>
+                  <h5>Big Apple League</h5>
                   <p>Troy, NY</p>
                   <div class="per">
                     <table>
@@ -81,14 +83,16 @@ export default function LeaguesList() {
                         <td>Year</td>
                       </tr>
                     </table>
-                  </div>
-                  <button>Profile</button>
+                    </div>
+                    <Link to="/LeagueHome" className="button-link">
+                    <button>Profile</button>
+                </Link>
                 </div>
                 
                 
                 <div class="card card4">
                 <img src={picture_7} alt="Naija League"/>
-                  <h5>NAIJA LEAGUE</h5>
+                  <h5>NAIJA League</h5>
                   <p>Troy, NY</p>
                   <div class="per">
                     <table>
@@ -102,7 +106,9 @@ export default function LeaguesList() {
                       </tr>
                     </table>
                   </div>
-                  <button>Profile</button>
+                  <Link to="/LeagueHome" className="button-link">
+                    <button>Profile</button>
+                </Link>
                 </div>
               </div>
         
