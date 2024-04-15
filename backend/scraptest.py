@@ -26,11 +26,14 @@ client = MongoClient(uri)
 
 mydb = client['fantasy_swimming']
 # print(mydb.list_collection_names())
-mycol = mydb['users']
+mycol = mydb['leagues']
+# mycol = mydb['users']
+leagues = mycol.find({"name": "testest"})
+for i in leagues:
+    print(i)
+# test_user = {'username': "testPython", 'password': 'IWatchValorant'}
 
-test_user = {'username': "testPython", 'password': 'IWatchValorant'}
-
-mycol.insert_one(test_user)
+# mycol.insert_one(test_user)
 
 
 

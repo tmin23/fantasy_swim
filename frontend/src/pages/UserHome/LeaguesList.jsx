@@ -40,7 +40,7 @@ export default function LeaguesList() {
                       </tr>
                     </table>
                    </div>
-                   <Link to="/LeagueBody">
+                   <Link to="/LeagueHome">
                     <button>Profile</button>
                 </Link>
             </div>
