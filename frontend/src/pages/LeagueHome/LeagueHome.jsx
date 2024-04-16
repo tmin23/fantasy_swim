@@ -45,7 +45,12 @@ export default function App() {
   }
   //------------------------------Ensures user is logged in------------------------------------------
 
-
+  function handleError(err) {
+    alert(err);
+  }
+  function handleSuccess(msg) {
+      alert(msg);
+  }
 
 
   let { leagueId } = useParams();
@@ -82,12 +87,53 @@ export default function App() {
     return res
   }
 
+  async function getTeams() { //gets array of all the teams in the league
+    const response = await fetch(`http://localhost:8080/api/leagues/${leagueId}/getTeams`, {
+      method: 'GET',
+      credentials: 'include'
+    });
+
+    let res = await response.json();
+    return res
+  }
+
+  async function draftSwimmer_(swimmer, socket) {
+
+    console.log("SWIMMER = ", swimmer);
+
+    const response = await fetch(`http://localhost:8080/api/leagues/${leagueId}/draftSwimmer`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'    
+      },
+      credentials: 'include',
+      body: JSON.stringify(swimmer)
+    });
+
+    let res = await response.json();
+
+    if(res.success) {
+      handleSuccess(res.message);
+
+      console.log("connected?", socket.connected);
+      socket.emit('user pick', [username, swimmer])
+      console.log("shouldve emitted");
+      return true;
+    }
+    else {
+      handleError(res.message);
+      return false;
+    }
+
+
+  }
+
 
   return (
     <>
     <Header username={username} onLogout = {Logout}/>
     {/* Take from the league name */}
-    <Body getLeagueInfo = {getLeagueInfo} getTeamInfo = {getTeamInfo} getSwimmers={getSwimmers}/>
+    <Body username={username} getLeagueInfo = {getLeagueInfo} getTeamInfo = {getTeamInfo} getSwimmers={getSwimmers} getTeams = {getTeams} draftSwimmer_={draftSwimmer_}/>
   </>
   );
 }

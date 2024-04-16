@@ -8,6 +8,10 @@ const userRoutes = require('./routes/api/users');
 const bodyParser = require('body-parser');
 
 var app = express();
+var httpServer = require("http").Server(app);
+
+var draft = require('./config/draft');
+draft.start(httpServer);
 
 app.use(cors({
     origin: ["http://localhost:3000"], 
@@ -24,6 +28,8 @@ connectDB();
 
 let port = 8080
 
-app.listen(port, () => {
+
+
+httpServer.listen(port, () => {
     console.log('server is listening at http://localhost:'+port);
 })

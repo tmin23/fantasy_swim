@@ -62,16 +62,16 @@ module.exports.joinLeague = async (req, res) => {
 }
 
 module.exports.getLeague = async (req, res) => {
-    leagueId = req.params.leagueId;
+    const leagueId = req.params.leagueId;
 
     const league = await League.findById(leagueId);
 
-    return res.json({name: league.name});
+    return res.json(league);
 }
 
 module.exports.getTeam = async (req, res) => {
-    leagueId = req.params.leagueId;
-    userId = null;
+    const leagueId = req.params.leagueId;
+    let userId = null;
     const token = req.cookies.token;
 
     // If no token in cookies, then the user never logged in
@@ -85,10 +85,8 @@ module.exports.getTeam = async (req, res) => {
         } else {
             userId = new ObjectId(data.id);
             league_id = new ObjectId(leagueId);
-            console.log(league_id);
             const team = await Team.findOne({ owner: userId, leagueId: league_id })
-            console.log(team);
-            if (team) return res.json({ status: true, team: team.name });
+            if (team) return res.json(team);
             else return res.json({ status: false });
         }
     })
@@ -96,15 +94,27 @@ module.exports.getTeam = async (req, res) => {
     
 }
 
+module.exports.getTeams = async (req, res) => {
+    const leagueId = req.params.leagueId;
+    
+    const league = await League.findById(leagueId);
+    const teamIds = league.teams;
+
+    const teams = await Team.find({
+        '_id': { $in: teamIds}
+    })
+
+    if (teams) return res.json(teams);
+    else return res.json({ status: false});
+
+}
+
 module.exports.getSwimmers = async (req, res) => {
     leagueId = req.params.leagueId;
 
     const league = await League.findById(leagueId);
 
-    console.log(league);
-
     const swimmers = league.swimmers;
-    console.log('swimmers = ', swimmers);
 
     let swimmerData = []
 
@@ -115,4 +125,44 @@ module.exports.getSwimmers = async (req, res) => {
     }
 
     return res.json(swimmerData);
+}
+
+module.exports.draftSwimmer = async (req, res) => {
+    const leagueId = req.params.leagueId;
+    const swimmer = req.body;
+    let swimmerId = swimmer._id;
+
+    const token = req.cookies.token;
+
+    // If no token in cookies, then the user never logged in
+    if(!token) {
+        return res.json( {status:false, message: "Nooooooo" });
+    }
+    //get the user's id and find the team based on that and leagueId
+
+    try{
+        jwt.verify(token, process.env.TOKEN_KEY, async (err, data) => {
+            if (err) {
+                return res.json({ status: false, message: "failed" });
+            } else {
+                userId = new ObjectId(data.id);
+                const team = await Team.updateOne(
+                    { owner: userId, leagueId: leagueId },
+                    { $addToSet: { roster: swimmerId}}
+                )
+                
+                if (team.modifiedCount === 1) {
+                    return res.json({success: true, message: `${swimmer.name} drafted`});
+                }
+                else if (team.matchedCount === 1 && team.modifiedCount === 0) {
+                    return res.json({message: "This Swimmer is already on your roster"});
+                }
+                else {
+                    return res.json({message: "Failed to draft swimmer"});
+                }
+            }
+        })
+    } catch {
+        return res.json({message: "Swimmer drafting failed"});
+    }
 }

@@ -9,7 +9,7 @@ const User = require('../../models/User');
 const Team = require('../../models/Team');
 const Swimmer = require('../../models/Swimmer');
 
-const {getLeague, getTeam, getSwimmers, joinLeague} = require('../../controllers/LeagueController');
+const {getLeague, getTeam, getSwimmers, joinLeague, getTeams, draftSwimmer} = require('../../controllers/LeagueController');
 
 require("dotenv").config({path: path.resolve(__dirname, '../../.env')});
 
@@ -26,13 +26,23 @@ router.get('/:leagueId', getLeague);
 // @access  Public
 router.get('/:leagueId/team', getTeam);
 
-// @route   GET api/leagues/:leagueId/team
-// @desc    Get league info of this particular league
+// @route   GET api/leagues/:leagueId/getSwimmers
+// @desc    Get all of the swimmers in a league
 // @access  Public
 router.get('/:leagueId/getSwimmers', getSwimmers);
 
+// @route   GET api/leagues/:leagueId/getTeams
+// @desc    Get all of the teams in a league
+// @access  Public
+router.get('/:leagueId/getTeams', getTeams);
+
+// @route   POST api/leagues/:leagueId/draftSwimmer
+// @desc    Add swimmer to user's team roster in league
+// @access  Public
+router.post('/:leagueId/draftSwimmer', draftSwimmer);
+
 // @route   POST api/leagues/join
-// @desc    Get league info of this particular league
+// @desc    Join league
 // @access  Public
 router.post('/join', joinLeague);
 

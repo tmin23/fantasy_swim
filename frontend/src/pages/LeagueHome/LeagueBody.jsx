@@ -7,6 +7,7 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import IconButton from "@mui/material/IconButton";
+import { Button, CircularProgress } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import TextField from "@mui/material/TextField";
 import { Icon, Tab, TableContainer } from '@mui/material';
@@ -18,33 +19,132 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import {io} from "socket.io-client";
 
 
-export default function Body({getLeagueInfo, getTeamInfo, getSwimmers}) {
-  const [leagueName, setLeagueName] = useState("");
-  const [teamName, setTeamName] = useState("");
+export default function Body({username, getLeagueInfo, getTeamInfo, getSwimmers, getTeams, draftSwimmer_}) {
+  const [leagueInfo, setLeagueInfo] = useState("");
+  const [teamInfo, setTeamInfo] = useState("");
+  const [teamsInfo, setTeamsInfo] = useState([]);
   const [swimmerInfo, setSwimmerInfo] = useState([]);
+  const [swimmer_names, setNames] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [currentSocket, setSocket] = useState(null);
+  const [draftInProgress, setDraftInProgress] = useState(false);
+  const [yourTurn, setTurn] = useState(false);
+
 
   useEffect( () => { //gets the league info on page render
     async function fetch_leagues() {
-      let leagueInfo = await getLeagueInfo();
-      setLeagueName(leagueInfo.name);
+      let leagueInfo_ = await getLeagueInfo();
+      setLeagueInfo(leagueInfo_);
     }
 
     async function fetch_team_info() {
-      let teamInfo = await getTeamInfo();
-      setTeamName(teamInfo.team);
+      let teamInfo_ = await getTeamInfo();
+      setTeamInfo(teamInfo_);
     }
 
     async function get_swimmers() {
       let swimmerInfo = await getSwimmers(); //the info of all swimmers in league
+      
+
+      const swimmerNames = []
+      for(let i=0; i< swimmerInfo.length; i++) {
+        swimmerNames.push(swimmerInfo[i].name);
+      }
+
+      console.log(swimmerInfo);
+      swimmerNames.sort();
+
+      swimmerInfo.sort((swimmer1, swimmer2) => {
+        if(swimmer1.name < swimmer2.name){
+          return -1;
+        }
+        else {
+          return 1;
+        }
+      });
+
       setSwimmerInfo(swimmerInfo);
+      setNames(swimmerNames);
+      setIsLoading(false);
+    }
+
+    async function get_teams() {
+      let info = await getTeams();
+      setTeamsInfo(info); 
     }
 
     fetch_leagues();
     fetch_team_info();
     get_swimmers();
+    get_teams();
+    
   }, []);
+
+  useEffect(() => { //useEffect for drafting
+    if(username) { //only do draft once username is set
+      //drafting operations via web socket
+      let socket = io("http://localhost:8080", {transports : ['websocket']});
+      setSocket(socket);
+      socket.on('connect', () => {
+        console.log("connected");
+        
+      })
+
+      socket.on('draft started', (order) => {
+        let userOrder = []
+        console.log(order);
+
+        order.forEach((user) => {
+          userOrder.push(user.username);
+        })
+        alert(`Draft Starting ... \n Order: ${userOrder.join(',')}`);
+
+      })
+
+      socket.on('user turn', (user) => {
+        console.log("USER TURN", user);
+        console.log("username = ", username);
+        if(user.username == username) {
+          alert("It's your turn!");
+          setTurn(true);
+        }
+        else {
+          alert(`It's ${user.username}'s turn`);
+          setTurn(false);
+        }
+      })
+
+      socket.on('announce pick', (pick) => {
+        alert(`${pick[0]} selected ${pick[1].name}`);
+      })
+    } 
+  }, [username])
+
+
+
+  function startDraft() {
+    
+    let teams_in_draft = []
+    teamsInfo.forEach((team, index) => {
+      teams_in_draft.push(team);
+    })
+    currentSocket.emit('start draft', teams_in_draft);
+
+  }
+
+  function draftSwimmer(index) {
+
+    if (swimmerInfo.length === 0) {
+      console.error("Swimmer info is not yet available.");
+      return;
+    }
+
+    const swimmer = swimmerInfo[index.index];
+    draftSwimmer_(swimmer, currentSocket); //drafts swimmer and emits
+  }
 
 
   const SearchBar = ({setSearchQuery}) => {
@@ -63,7 +163,6 @@ export default function Body({getLeagueInfo, getTeamInfo, getSwimmers}) {
     <form onSubmit={handleSubmit}>
         <TextField
             id = 'search-bar'
-            disableAutoFocus={true}
             className='text'
             value = {searchQuery}
             onChange={(e) => {
@@ -100,28 +199,8 @@ export default function Body({getLeagueInfo, getTeamInfo, getSwimmers}) {
         </ListItem>
       )
   };
-  const swimmer_names = []
-  for(let i=0; i< swimmerInfo.length; i++) {
-    swimmer_names.push(swimmerInfo[i].name);
-  }
-  console.log(swimmerInfo);
-  swimmer_names.sort((swimmer1, swimmer2) => {
-    if(swimmer1.name < swimmer2.name){
-      return -1;
-    }
-    else {
-      return 1;
-    }
-  });
 
-  swimmerInfo.sort((swimmer1, swimmer2) => {
-    if(swimmer1.name < swimmer2.name){
-      return -1;
-    }
-    else {
-      return 1;
-    }
-  });
+  
 
   const [searchQuery, setSearchQuery] = React.useState("");
   const dataFiltered = filterData(searchQuery, swimmer_names);
@@ -135,8 +214,10 @@ export default function Body({getLeagueInfo, getTeamInfo, getSwimmers}) {
 
                   {dataFiltered.map((swimmer, index) => (
                     <button
-                        key={swimmerInfo[index]}
+                        key={index}
                         className="text"
+                        disabled={!yourTurn}
+                        onClick={() => draftSwimmer({index})}
                         style={{
                             padding: 5,
                             justifyContent: "normal",
@@ -156,8 +237,8 @@ export default function Body({getLeagueInfo, getTeamInfo, getSwimmers}) {
               </div>
           </Grid>
           <Grid item style = {{marginTop: '5px', marginLeft: '10%', width: '800px'}}>
-            <h1 style={{margin: '0'}}>{teamName}</h1>
-            <h6>{leagueName}</h6>
+            <h1 style={{margin: '0'}}>{teamInfo.name}</h1>
+            <h6>{leagueInfo.name}</h6>
           <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                   <TableHead>
@@ -183,6 +264,19 @@ export default function Body({getLeagueInfo, getTeamInfo, getSwimmers}) {
                   </TableBody>
               </Table>
           </TableContainer>
+          </Grid>
+          <Grid>
+            <Button
+                className = 'btnn'
+                style={{ marginTop: '15px', marginLeft: '10px' }}
+                variant="contained"
+                color="primary"
+                disabled={isLoading}
+                onClick={startDraft}
+                startIcon={isLoading ? <CircularProgress size={20} color="inherit" /> : null}
+                >
+                {isLoading ? 'Loading...' : 'Start Draft'}
+            </Button>
           </Grid>
         </Grid>
     );
