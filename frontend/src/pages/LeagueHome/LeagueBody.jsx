@@ -1,49 +1,29 @@
-import React, {useState, useEffect} from "react";
-import { styled } from "@mui/material/styles";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import { Typography } from "@mui/material";
-import Stack from '@mui/material/Stack';
-// import Button from '@mui/material/Button';
-import {Menu, MenuItem, Button} from '@mui/material';
-// import MenuItem from '@mui/material/MenuItem';
-import {Link} from 'react-router-dom'
+import React, {useState, useEffect, useRef} from "react";
+import Box from '@mui/material/Box';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import IconButton from "@mui/material/IconButton";
+import SearchIcon from '@mui/icons-material/Search';
+import TextField from "@mui/material/TextField";
+import { Icon, Tab, TableContainer } from '@mui/material';
+// import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Unstable_Grid2';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.white,
-    color: theme.palette.common.black,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
-}));
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
-
-export default function Body({getLeagueInfo, getTeamInfo}) {
+export default function Body({getLeagueInfo, getTeamInfo, getSwimmers}) {
   const [leagueName, setLeagueName] = useState("");
+  const [teamName, setTeamName] = useState("");
+  const [swimmerInfo, setSwimmerInfo] = useState([]);
 
   useEffect( () => { //gets the league info on page render
     async function fetch_leagues() {
@@ -53,69 +33,157 @@ export default function Body({getLeagueInfo, getTeamInfo}) {
 
     async function fetch_team_info() {
       let teamInfo = await getTeamInfo();
-      console.log(teamInfo.team);
+      setTeamName(teamInfo.team);
+    }
+
+    async function get_swimmers() {
+      let swimmerInfo = await getSwimmers(); //the info of all swimmers in league
+      setSwimmerInfo(swimmerInfo);
     }
 
     fetch_leagues();
     fetch_team_info();
+    get_swimmers();
   }, []);
 
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-      setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-      setAnchorEl(null);
-    };
+  const SearchBar = ({setSearchQuery}) => {
+    const handleSubmit = (e) => {
+      e.preventDefault();
+    }
+
+    const inputRef = useRef(null);
+
+    useEffect(() => {
+        // Set focus on the input field when the component mounts or searchQuery changes
+        inputRef.current.focus();
+    }, [searchQuery]);
+
+    return (
+    <form onSubmit={handleSubmit}>
+        <TextField
+            id = 'search-bar'
+            disableAutoFocus={true}
+            className='text'
+            value = {searchQuery}
+            onChange={(e) => {
+                setSearchQuery(e.target.value);
+            }}
+            label='Search Swimmer'
+            variant='outlined'
+            placeholder= "Swimmer's Name"
+            size='small'
+            inputRef={inputRef} // Set inputRef to the ref created
+        />
+            <IconButton type = 'submit' aria-label ='search'>
+                <SearchIcon style = {{fill: "black"}} />
+            </IconButton>
+    </form>
+)};
+
+  const filterData = (query, data) => {
+    if (!query) {
+        return data;
+    } else {
+        return data.filter((d) => d.toLowerCase().includes(query));
+    }
+  };
+
+  function renderRow(props) {
+      const { index, style } = props;
+    
+      return (
+        <ListItem style={style} key={index} component="div" disablePadding>
+          <ListItemButton>
+            <ListItemText primary='yo' />
+          </ListItemButton>
+        </ListItem>
+      )
+  };
+  const swimmer_names = []
+  for(let i=0; i< swimmerInfo.length; i++) {
+    swimmer_names.push(swimmerInfo[i].name);
+  }
+  console.log(swimmerInfo);
+  swimmer_names.sort((swimmer1, swimmer2) => {
+    if(swimmer1.name < swimmer2.name){
+      return -1;
+    }
+    else {
+      return 1;
+    }
+  });
+
+  swimmerInfo.sort((swimmer1, swimmer2) => {
+    if(swimmer1.name < swimmer2.name){
+      return -1;
+    }
+    else {
+      return 1;
+    }
+  });
+
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const dataFiltered = filterData(searchQuery, swimmer_names);
+
   return (
-    <TableContainer component={Paper}>
-      <Button id = 'basic-button'
-        aria-controls = {open ? 'basic-menu' : undefined}
-        aria-haspopup = 'true'
-        aria-expanded = {open ? 'true': undefined}
-        onClick={handleClick}
-      >
-        {/* This should be your first leage that you have joined for "Main League" */}
-        <Typography variant="h5" color = 'common.black'>
-        {/* Should pull from database to the league name */}
-        League Name: {leagueName}
-        </Typography>
-      </Button>
-      <Menu id = 'basic-menu'
-        anchorEl={anchorEl}
-        open = {open}
-        onClose={handleClose}
-        MenuListProps={{'aria-labelledby': 'basic-button'}}
-      >
-        {/* Pull from database to get all users within the League */}
-        <MenuItem onClick={handleClose}>Tony</MenuItem> 
-        <MenuItem onClick={handleClose}>Mike</MenuItem>
-        
-      </Menu>
-      
-      <TableHead>
-        <TableRow>
-            {/* Can keep on adding cells if we want more infomation */}
-          <StyledTableCell> Swimmers</StyledTableCell>
-          <StyledTableCell> Team</StyledTableCell>
-          <StyledTableCell> Points</StyledTableCell>
-        </TableRow>
-      </TableHead>
+      <Grid container spacing = {10} direction = 'row' justifyContent = 'flex-start' alignItems='flex-start'>
+          <Grid item style = {{ marginTop: '5px', marginLeft: '5px'}}>
+              <SearchBar searchQuery={searchQuery} style = {{marginTop: '10px'}} setSearchQuery={setSearchQuery}/>
+              <div style={{ padding: 3 }}>
+                <div style={ {marginBottom: '5px', height: '750px', width: "275px", overflowY: 'scroll'}}>
 
-      <TableBody>
-        {/* Should pull from the database in order to complete the the drafted roster */}
-        <StyledTableCell> Mike Dowd</StyledTableCell>
-        <StyledTableCell> Rensselaer Polytechnic Insitute</StyledTableCell>
-        <StyledTableCell> 2</StyledTableCell>
-      </TableBody>
-      <TableBody>
-        <StyledTableCell> Tony Min</StyledTableCell>
-        <StyledTableCell> Rensselaer Polytechnic Insitute Club Team</StyledTableCell>
-        <StyledTableCell> More than Mike dowd</StyledTableCell>
-      </TableBody>
+                  {dataFiltered.map((swimmer, index) => (
+                    <button
+                        key={swimmerInfo[index]}
+                        className="text"
+                        style={{
+                            padding: 5,
+                            justifyContent: "normal",
+                            fontSize: 20,
+                            color: "black",
+                            margin: 0,
+                            width: "250px",
+                            border: "1px solid green", // corrected BorderColor to border
+                            borderRadius: "100px", // added border radius for rounded corners
+                            backgroundColor: "#f0f0f0" // added background color
+                        }}
+                      >
+                          {swimmer}<br></br>  {swimmerInfo[index].team}
+                      </button>
+                    ))}
+                </div>
+              </div>
+          </Grid>
+          <Grid item style = {{marginTop: '5px', marginLeft: '10%', width: '800px'}}>
+            <h1 style={{margin: '0'}}>{teamName}</h1>
+            <h6>{leagueName}</h6>
+          <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <TableHead>
+                  <TableRow>
+                      <TableCell style = {{color: 'white'}}>ID</TableCell>
+                      <TableCell align="left" style = {{color: 'white'}}>Swimmers</TableCell>
+                      <TableCell align="left" style = {{color: 'white'}}>Team</TableCell>
+                      <TableCell align="left" style = {{color: 'white'}}>Stroke</TableCell>
+                      <TableCell align="left" style = {{color: 'white'}}>Points</TableCell>
+                  </TableRow>
+                  </TableHead>
+                  <TableBody>
+                      {swimmerInfo.map((swimmer, index) => (
+                        <TableRow key = {index}>
+                            <TableCell style={{color: 'black'}}>{index}</TableCell>
+                            <TableCell style={{color: 'black'}}>{swimmer.name}</TableCell>
+                            <TableCell style={{color: 'black'}}>{swimmer.team}</TableCell>
+                            <TableCell style={{color: 'black'}}>{"None"}</TableCell>
+                            <TableCell style={{color: 'black'}}>{0}</TableCell>
+                        </TableRow>
+                      ))}
 
-    </TableContainer>
-  );
-}
+                  </TableBody>
+              </Table>
+          </TableContainer>
+          </Grid>
+        </Grid>
+    );
+  }

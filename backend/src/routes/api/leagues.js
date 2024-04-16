@@ -9,7 +9,7 @@ const User = require('../../models/User');
 const Team = require('../../models/Team');
 const Swimmer = require('../../models/Swimmer');
 
-const {getLeague, getTeam} = require('../../controllers/LeagueController');
+const {getLeague, getTeam, getSwimmers, joinLeague} = require('../../controllers/LeagueController');
 
 require("dotenv").config({path: path.resolve(__dirname, '../../.env')});
 
@@ -26,6 +26,16 @@ router.get('/:leagueId', getLeague);
 // @access  Public
 router.get('/:leagueId/team', getTeam);
 
+// @route   GET api/leagues/:leagueId/team
+// @desc    Get league info of this particular league
+// @access  Public
+router.get('/:leagueId/getSwimmers', getSwimmers);
+
+// @route   POST api/leagues/join
+// @desc    Get league info of this particular league
+// @access  Public
+router.post('/join', joinLeague);
+
 
 // @route   POST api/leagues
 // @desc    Add league to database, populate league with swimmers(if the meet is populated)
@@ -37,6 +47,11 @@ router.post("/", async (req, res) => {
 
     if (!name || !meet_link) {
         return res.json({message: "All fields required"});
+    }
+
+    let exists = await League.exists({name: name});
+    if(exists) {
+        return res.json({message: "A league with this name already exists, choose another name"});
     }
 
     // Check if the meet_link is valid
@@ -173,7 +188,7 @@ router.post("/", async (req, res) => {
                         { $addToSet: {teams: team._id}});
                 })
                 .then(() => {
-                    return res.json({message: 'League added', success: true})
+                    return res.json({message: 'League added', success: true, id: league_id.toString()})
                 })
                 .catch(err => {
                     console.log(err);

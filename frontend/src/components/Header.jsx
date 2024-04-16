@@ -33,6 +33,10 @@ export default function App({username, onLogout}) {
             <MDBBtn rounded>Create League</MDBBtn>
           </Link>
 
+          <Link to="/JoinLeague">
+            <MDBBtn rounded>Join League</MDBBtn>
+          </Link>
+
         <MDBDropdown>
           <MDBDropdownToggle tag='a' className='nav-link' role='button'>
             {username}

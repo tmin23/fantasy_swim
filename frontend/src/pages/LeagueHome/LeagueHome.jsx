@@ -61,7 +61,7 @@ export default function App() {
     return res;
   }
 
-  async function getTeamInfo() {
+  async function getTeamInfo() { //gets info on the user's team associated with league
     const response = await fetch(`http://localhost:8080/api/leagues/${leagueId}/team`, {
       method: 'GET',
       credentials: 'include'
@@ -71,12 +71,23 @@ export default function App() {
     return res;
   }
 
+  async function getSwimmers() { //gets all of the swimmers that are in league
+
+    const response = await fetch(`http://localhost:8080/api/leagues/${leagueId}/getSwimmers`, {
+      method: 'GET',
+      credentials: 'include'
+    });
+
+    let res = await response.json();
+    return res
+  }
+
 
   return (
     <>
     <Header username={username} onLogout = {Logout}/>
     {/* Take from the league name */}
-    <Body getLeagueInfo = {getLeagueInfo} getTeamInfo = {getTeamInfo}/>
+    <Body getLeagueInfo = {getLeagueInfo} getTeamInfo = {getTeamInfo} getSwimmers={getSwimmers}/>
   </>
   );
 }
