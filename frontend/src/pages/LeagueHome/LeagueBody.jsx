@@ -161,7 +161,7 @@ export default function Body({username, getLeagueInfo, getTeamInfo, getSwimmers,
 
 
   function startDraft() {
-    window.location.reload(); //so that all browsers in socket are included
+    //window.location.reload(); //so that all browsers in socket are included
 
     let teams_in_draft = []
     teamsInfo.forEach((team, index) => {
