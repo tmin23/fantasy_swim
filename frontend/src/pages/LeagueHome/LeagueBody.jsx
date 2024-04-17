@@ -52,7 +52,6 @@ export default function Body({username, getLeagueInfo, getTeamInfo, getSwimmers,
     async function fetch_team_roster() {
       let teamRoster_ = await getRoster();
       setTeamRoster(teamRoster_.swimmers);
-      console.log(teamRoster_);
     }
 
     async function get_swimmers() {
@@ -64,7 +63,6 @@ export default function Body({username, getLeagueInfo, getTeamInfo, getSwimmers,
         swimmerNames.push(swimmerInfo[i].name);
       }
 
-      console.log(swimmerInfo);
       swimmerNames.sort();
 
       swimmerInfo.sort((swimmer1, swimmer2) => {
@@ -76,8 +74,13 @@ export default function Body({username, getLeagueInfo, getTeamInfo, getSwimmers,
         }
       });
 
+      let swimmerNames_ = []
+      swimmerNames.forEach((swimmer, index) => {
+        swimmerNames_.push({"name": swimmer, "index": index});
+      })
+
       setSwimmerInfo(swimmerInfo);
-      setNames(swimmerNames);
+      setNames(swimmerNames_);
       setIsLoading(false);
     }
 
@@ -175,7 +178,7 @@ export default function Body({username, getLeagueInfo, getTeamInfo, getSwimmers,
       return;
     }
 
-    const swimmer = swimmerInfo[index.index];
+    const swimmer = swimmerInfo[index];
     console.log(currentEventName);
     let res = await draftSwimmer_(swimmer, currentSocket, currentEventName); //drafts swimmer and emits
 
@@ -226,7 +229,7 @@ export default function Body({username, getLeagueInfo, getTeamInfo, getSwimmers,
     if (!query) {
         return data;
     } else {
-        return data.filter((d) => d.toLowerCase().includes(query));
+        return data.filter((d) => d.name.toLowerCase().includes(query));
     }
   };
 
@@ -256,7 +259,7 @@ export default function Body({username, getLeagueInfo, getTeamInfo, getSwimmers,
 
                   {dataFiltered.map((swimmer, index) => {
                   if(drafted_swimmers.includes(swimmer.name)) {
-                    return
+                    return null;
                   }
                   else {
                   return(
@@ -264,7 +267,7 @@ export default function Body({username, getLeagueInfo, getTeamInfo, getSwimmers,
                         key={index}
                         className="text"
                         disabled={!yourTurn}
-                        onClick={() => draftSwimmer({index})}
+                        onClick={() => draftSwimmer(swimmer.index)}
                         style={{
                             padding: 5,
                             justifyContent: "normal",
@@ -277,7 +280,7 @@ export default function Body({username, getLeagueInfo, getTeamInfo, getSwimmers,
                             backgroundColor: "#f0f0f0" // added background color
                         }}
                       >
-                          {swimmer}<br></br>  {swimmerInfo[index].team}
+                          {swimmer.name}<br></br>  {swimmerInfo[index].team}
                       </button>
                     )}})}
                 </div>
