@@ -45,6 +45,8 @@ export default function App() {
   }
   //------------------------------Ensures user is logged in------------------------------------------
 
+  const [pickNum, setPickNum] = useState(0);
+
   function handleError(err) {
     alert(err);
   }
@@ -97,7 +99,17 @@ export default function App() {
     return res
   }
 
-  async function draftSwimmer_(swimmer, socket) {
+  async function getRoster() {
+    const response = await fetch(`http://localhost:8080/api/leagues/${leagueId}/getRoster`, {
+      method: 'GET',
+      credentials: 'include'
+    });
+
+    let res = await response.json();
+    return res
+  }
+
+  async function draftSwimmer_(swimmer, socket, eventName) {
 
     console.log("SWIMMER = ", swimmer);
 
@@ -116,7 +128,8 @@ export default function App() {
       handleSuccess(res.message);
 
       console.log("connected?", socket.connected);
-      socket.emit('user pick', [username, swimmer])
+      setPickNum(pickNum+1);
+      socket.emit(eventName, [username, swimmer, pickNum])
       console.log("shouldve emitted");
       return true;
     }
@@ -133,7 +146,7 @@ export default function App() {
     <>
     <Header username={username} onLogout = {Logout}/>
     {/* Take from the league name */}
-    <Body username={username} getLeagueInfo = {getLeagueInfo} getTeamInfo = {getTeamInfo} getSwimmers={getSwimmers} getTeams = {getTeams} draftSwimmer_={draftSwimmer_}/>
+    <Body username={username} getLeagueInfo = {getLeagueInfo} getTeamInfo = {getTeamInfo} getSwimmers={getSwimmers} getTeams = {getTeams} draftSwimmer_={draftSwimmer_} getRoster={getRoster}/>
   </>
   );
 }

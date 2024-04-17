@@ -127,6 +127,40 @@ module.exports.getSwimmers = async (req, res) => {
     return res.json(swimmerData);
 }
 
+module.exports.getRoster = async (req, res) => {
+    const leagueId = req.params.leagueId;
+    let userId = null;
+    const token = req.cookies.token;
+
+    // If no token in cookies, then the user never logged in
+    if(!token) {
+        return res.json( {status:false });
+    }
+    //get the user's id and find the team based on that and leagueId
+    jwt.verify(token, process.env.TOKEN_KEY, async (err, data) => {
+        if (err) {
+            return res.json({ status: false });
+        } else {
+            userId = new ObjectId(data.id);
+            league_id = new ObjectId(leagueId);
+            const team = await Team.findOne({ owner: userId, leagueId: league_id })
+           
+            const swimmerIds = team.roster;
+
+            const swimmers = await Swimmer.find({
+                '_id': { $in: swimmerIds}
+            })
+
+            if(swimmers){
+                return res.json({swimmers});
+            }
+            else {
+                return res.json({message: "failed"});
+            }
+        }
+    })
+}
+
 module.exports.draftSwimmer = async (req, res) => {
     const leagueId = req.params.leagueId;
     const swimmer = req.body;
@@ -140,29 +174,40 @@ module.exports.draftSwimmer = async (req, res) => {
     }
     //get the user's id and find the team based on that and leagueId
 
-    try{
-        jwt.verify(token, process.env.TOKEN_KEY, async (err, data) => {
-            if (err) {
-                return res.json({ status: false, message: "failed" });
-            } else {
-                userId = new ObjectId(data.id);
-                const team = await Team.updateOne(
-                    { owner: userId, leagueId: leagueId },
-                    { $addToSet: { roster: swimmerId}}
-                )
-                
-                if (team.modifiedCount === 1) {
-                    return res.json({success: true, message: `${swimmer.name} drafted`});
-                }
-                else if (team.matchedCount === 1 && team.modifiedCount === 0) {
-                    return res.json({message: "This Swimmer is already on your roster"});
-                }
-                else {
-                    return res.json({message: "Failed to draft swimmer"});
-                }
+    try {
+        const data = jwt.verify(token, process.env.TOKEN_KEY);
+        try {
+            const league = await League.findById(leagueId);
+            if (!league) {
+                return res.json({ message: "League not found" });
             }
-        })
-    } catch {
-        return res.json({message: "Swimmer drafting failed"});
+    
+            const teams = await Team.find({ '_id': { $in: league.teams } });
+            const teamNamesWithSwimmer = teams.filter(team => team.roster.includes(swimmerId)).map(team => team.name);
+    
+            if (teamNamesWithSwimmer.length > 0) {
+                return res.json({ message: `This swimmer is already on ${teamNamesWithSwimmer.join(', ')}'s roster` });
+            }
+    
+            const userId = new ObjectId(data.id);
+            const updateResult = await Team.updateOne(
+                { owner: userId, leagueId: leagueId },
+                { $addToSet: { roster: swimmerId } }
+            );
+    
+            if (updateResult.modifiedCount === 1) {
+                return res.json({ success: true, message: "Swimmer drafted successfully" });
+            } else if (updateResult.matchedCount === 1 && updateResult.modifiedCount === 0) {
+                return res.json({ message: "This swimmer is already on your roster" });
+            } else {
+                return res.json({ message: "Failed to draft swimmer" });
+            }
+        } catch (error) {
+            console.error("Error processing the draft:", error);
+            return res.json({ message: "Error processing the draft" });
+        }
+    } catch (err) {
+        console.error("JWT verification failed:", err);
+        return res.json({ status: false, message: "JWT verification failed" });
     }
 }

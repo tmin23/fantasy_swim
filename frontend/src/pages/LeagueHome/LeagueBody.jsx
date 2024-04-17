@@ -22,15 +22,19 @@ import Paper from '@mui/material/Paper';
 import {io} from "socket.io-client";
 
 
-export default function Body({username, getLeagueInfo, getTeamInfo, getSwimmers, getTeams, draftSwimmer_}) {
+export default function Body({username, getLeagueInfo, getTeamInfo, getSwimmers, getTeams, draftSwimmer_, getRoster}) {
   const [leagueInfo, setLeagueInfo] = useState("");
   const [teamInfo, setTeamInfo] = useState("");
   const [teamsInfo, setTeamsInfo] = useState([]);
   const [swimmerInfo, setSwimmerInfo] = useState([]);
   const [swimmer_names, setNames] = useState([]);
+  const [drafted_swimmers, setDraftedSwimmers] = useState([]);
+  const [teamRoster, setTeamRoster] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentSocket, setSocket] = useState(null);
+  const [currentEventName, setEventName] = useState("");
   const [draftInProgress, setDraftInProgress] = useState(false);
+  const [draftCompleted, setDraftCompleted] = useState(false);
   const [yourTurn, setTurn] = useState(false);
 
 
@@ -43,6 +47,12 @@ export default function Body({username, getLeagueInfo, getTeamInfo, getSwimmers,
     async function fetch_team_info() {
       let teamInfo_ = await getTeamInfo();
       setTeamInfo(teamInfo_);
+    }
+
+    async function fetch_team_roster() {
+      let teamRoster_ = await getRoster();
+      setTeamRoster(teamRoster_.swimmers);
+      console.log(teamRoster_);
     }
 
     async function get_swimmers() {
@@ -80,6 +90,7 @@ export default function Body({username, getLeagueInfo, getTeamInfo, getSwimmers,
     fetch_team_info();
     get_swimmers();
     get_teams();
+    fetch_team_roster();
     
   }, []);
 
@@ -87,13 +98,15 @@ export default function Body({username, getLeagueInfo, getTeamInfo, getSwimmers,
     if(username) { //only do draft once username is set
       //drafting operations via web socket
       let socket = io("http://localhost:8080", {transports : ['websocket']});
-      setSocket(socket);
       socket.on('connect', () => {
         console.log("connected");
-        
+        console.log("Connected to server, registering user ID:", username);
+        socket.emit('register', username);
       })
 
       socket.on('draft started', (order) => {
+        setDraftInProgress(true);
+        setIsLoading(true);
         let userOrder = []
         console.log(order);
 
@@ -104,11 +117,13 @@ export default function Body({username, getLeagueInfo, getTeamInfo, getSwimmers,
 
       })
 
-      socket.on('user turn', (user) => {
+      socket.on('user turn', (data) => {
+        const {user, pickNumber, eventName} = data;
+        setEventName(eventName);
         console.log("USER TURN", user);
         console.log("username = ", username);
         if(user.username == username) {
-          alert("It's your turn!");
+          alert(`It's your turn! Pick number ${pickNumber+1}`);
           setTurn(true);
         }
         else {
@@ -118,15 +133,33 @@ export default function Body({username, getLeagueInfo, getTeamInfo, getSwimmers,
       })
 
       socket.on('announce pick', (pick) => {
-        alert(`${pick[0]} selected ${pick[1].name}`);
+        alert(`${pick.picker} selected ${pick.pick.name} pick #${pick.pickNumber}`);
+        console.log(`${pick.picker} selected ${pick.pick.name} pick #${pick.pickNumber}`)
+
+        setDraftedSwimmers(prev => [...prev, pick.pick.name]);
+        
+
+        return () => socket.off('announce pick');
       })
+
+      socket.on('end draft', (val) => {
+        setDraftInProgress(false);
+        setDraftCompleted(true);
+        alert("Draft Completed!");
+      })
+
+
+      setSocket(socket);
+
+      return () => socket.close();
     } 
   }, [username])
 
 
 
   function startDraft() {
-    
+    window.location.reload(); //so that all browsers in socket are included
+
     let teams_in_draft = []
     teamsInfo.forEach((team, index) => {
       teams_in_draft.push(team);
@@ -135,7 +168,7 @@ export default function Body({username, getLeagueInfo, getTeamInfo, getSwimmers,
 
   }
 
-  function draftSwimmer(index) {
+  async function draftSwimmer(index) {
 
     if (swimmerInfo.length === 0) {
       console.error("Swimmer info is not yet available.");
@@ -143,7 +176,16 @@ export default function Body({username, getLeagueInfo, getTeamInfo, getSwimmers,
     }
 
     const swimmer = swimmerInfo[index.index];
-    draftSwimmer_(swimmer, currentSocket); //drafts swimmer and emits
+    console.log(currentEventName);
+    let res = await draftSwimmer_(swimmer, currentSocket, currentEventName); //drafts swimmer and emits
+
+    if (res) {
+      let teamRoster_ = await getRoster();
+      setTeamRoster(teamRoster_.swimmers);
+      setTurn(false);
+    }
+
+    
   }
 
 
@@ -212,7 +254,12 @@ export default function Body({username, getLeagueInfo, getTeamInfo, getSwimmers,
               <div style={{ padding: 3 }}>
                 <div style={ {marginBottom: '5px', height: '750px', width: "275px", overflowY: 'scroll'}}>
 
-                  {dataFiltered.map((swimmer, index) => (
+                  {dataFiltered.map((swimmer, index) => {
+                  if(drafted_swimmers.includes(swimmer.name)) {
+                    return
+                  }
+                  else {
+                  return(
                     <button
                         key={index}
                         className="text"
@@ -232,7 +279,7 @@ export default function Body({username, getLeagueInfo, getTeamInfo, getSwimmers,
                       >
                           {swimmer}<br></br>  {swimmerInfo[index].team}
                       </button>
-                    ))}
+                    )}})}
                 </div>
               </div>
           </Grid>
@@ -251,7 +298,7 @@ export default function Body({username, getLeagueInfo, getTeamInfo, getSwimmers,
                   </TableRow>
                   </TableHead>
                   <TableBody>
-                      {swimmerInfo.map((swimmer, index) => (
+                      {teamRoster.map((swimmer, index) => (
                         <TableRow key = {index}>
                             <TableCell style={{color: 'black'}}>{index}</TableCell>
                             <TableCell style={{color: 'black'}}>{swimmer.name}</TableCell>
@@ -271,11 +318,11 @@ export default function Body({username, getLeagueInfo, getTeamInfo, getSwimmers,
                 style={{ marginTop: '15px', marginLeft: '10px' }}
                 variant="contained"
                 color="primary"
-                disabled={isLoading}
+                disabled={draftCompleted || isLoading}
                 onClick={startDraft}
                 startIcon={isLoading ? <CircularProgress size={20} color="inherit" /> : null}
                 >
-                {isLoading ? 'Loading...' : 'Start Draft'}
+                {isLoading ? 'Loading...' : draftInProgress ? 'Draft in Progress...': draftCompleted ? 'Already Drafted':  'Start Draft'}
             </Button>
           </Grid>
         </Grid>
